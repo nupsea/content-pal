@@ -1,0 +1,3 @@
+"""
+Content-Pal Modular Architecture
+"""
