@@ -6,7 +6,7 @@ import json
 import pandas as pd
 import re
 import random
-from typing import List, Dict, Set
+from typing import List, Dict, Optional
 from collections import defaultdict
 
 
@@ -106,7 +106,7 @@ class GroundTruthGenerator:
         
         return queries
     
-    def generate_genre_queries(self, genres: List[str], release_year: int = None) -> List[str]:
+    def generate_genre_queries(self, genres: List[str], release_year: Optional[int] = None) -> List[str]:
         """Generate genre-based queries"""
         queries = []
         
@@ -207,8 +207,8 @@ class GroundTruthGenerator:
         # Limit number of queries
         return cleaned_queries[:max_queries]
     
-    def generate_ground_truth(self, csv_path: str, output_path: str = None, 
-                            sample_size: int = None) -> Dict[str, List[str]]:
+    def generate_ground_truth(self, csv_path: str, output_path: Optional[str] = None, 
+                            sample_size: Optional[int] = None) -> Dict[str, List[str]]:
         """Generate comprehensive ground truth dataset"""
         print(f"Loading dataset from {csv_path}...")
         df = pd.read_csv(csv_path, encoding='latin-1')

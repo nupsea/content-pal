@@ -4,7 +4,7 @@ Comprehensive evaluation system for search backends and RAG systems
 
 import json
 import time
-from typing import Dict, List, Any, Optional, Union
+from typing import Dict, List, Any, Optional, Union, cast
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import defaultdict
 
@@ -29,8 +29,9 @@ class SearchEvaluator:
             start_time = time.time()
             
             if self.is_adaptive:
-                # Use adaptive retriever
-                result = self.system.retrieve(query, **kwargs)
+                # Use adaptive retriever (cast for type checking)
+                adaptive_system = cast(AdaptiveRetriever, self.system)
+                result = adaptive_system.retrieve(query, **kwargs)
                 hits = result.get('hits', [])
                 intent_info = result.get('query_intent')
                 strategy = result.get('strategy_used', 'unknown')
@@ -41,7 +42,9 @@ class SearchEvaluator:
                                  'listed_in': 1.0, 'description': 0.5},
                     max_results=kwargs.get('top_k', 50)
                 )
-                search_results = self.system.search(query, config)
+                # Cast to ContentSearchSystem to satisfy static type checking
+                search_system = cast(ContentSearchSystem, self.system)
+                search_results = search_system.search(query, config)
                 hits = [{'_source': {'show_id': r.id}} for r in search_results]
                 intent_info = None
                 strategy = 'basic_search'
@@ -195,7 +198,7 @@ class SearchEvaluator:
     
     def compare_configurations(self, queries: Dict[str, List[str]], 
                              configs: List[Dict[str, Any]], 
-                             config_names: List[str] = None) -> Dict[str, Any]:
+                             config_names: Optional[List[str]] = None) -> Dict[str, Any]:
         """Compare multiple search configurations"""
         if config_names is None:
             config_names = [f"config_{i+1}" for i in range(len(configs))]

@@ -2,7 +2,7 @@
 Evaluation metrics for search and retrieval systems
 """
 
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from collections import defaultdict
 
 
@@ -19,7 +19,7 @@ def mrr_at_k(ranked_ids: List[str], gold_id: str, k: int = 10) -> float:
     return 0.0
 
 
-def calculate_metrics(results: List[Dict[str, Any]], k_values: List[int] = None) -> Dict[str, float]:
+def calculate_metrics(results: List[Dict[str, Any]], k_values: Optional[List[int]] = None) -> Dict[str, float]:
     """
     Calculate comprehensive metrics from evaluation results
     
@@ -62,7 +62,7 @@ def calculate_metrics(results: List[Dict[str, Any]], k_values: List[int] = None)
 
 def calculate_metrics_by_category(results: List[Dict[str, Any]], 
                                   category_key: str = 'intent_type',
-                                  k_values: List[int] = None) -> Dict[str, Dict[str, float]]:
+                                  k_values: Optional[List[int]] = None) -> Dict[str, Dict[str, float]]:
     """Calculate metrics broken down by category"""
     if k_values is None:
         k_values = [1, 5, 10]
