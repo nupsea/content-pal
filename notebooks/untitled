@@ -1,0 +1,14 @@
+
+show_id: $show_id
+type: $type
+title: $title
+director: $director
+cast: $cast
+country: $country
+date_added: $date_added
+release_year: $release_year
+rating: $rating
+duration: $duration
+listed_in: $listed_in
+description: $description
+

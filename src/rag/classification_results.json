@@ -1,0 +1,696 @@
+{
+  "ground_truth_stats": {
+    "total_shows": 1000,
+    "total_unique_queries": 3933
+  },
+  "llm_analysis": {
+    "total_queries": 50,
+    "intent_distribution": {
+      "HYBRID": 31,
+      "GENRE": 8,
+      "SPECIFIC": 8,
+      "MOOD": 1,
+      "COMPLEX": 2
+    },
+    "strategy_distribution": {
+      "hybrid": 31,
+      "filtered": 8,
+      "keyword": 8,
+      "semantic": 3
+    },
+    "avg_confidence": 0.5860000000000001,
+    "low_confidence_queries": [
+      {
+        "query": "cult dramas with a political theme",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Spanish series",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "films about saving oceans",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "martial arts movies",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movies from Canada and South Africa",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "films set in Europe and Asia",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "story of an independent baseball team",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movies about community struggles",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "films about fashionable women in crisis",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movie set in Nantucket during summer",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "shows about middle school friendships",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Hotel",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "basketball",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Grizzy",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "fox",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Muslim activism",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "story about finding lost love",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "inspirational stories of athletes with disabilities",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "grifter and swindlers in India",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "humorous take on marriage challenges",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "true stories about underdog athletes",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "redemption",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "shows about justice and wrongful convictions",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Japanese show",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "films about hidden musicians",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movies about fighting and technology",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Indian love story",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Indian movies released in 2016",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "great white shark terrorizes an island",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Nigerian movies",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Black designers in the fashion industry",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      }
+    ],
+    "results": [
+      {
+        "query": "cult dramas with a political theme",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Spanish series",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "films about saving oceans",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "documentaries about in vitro fertilization",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['documentaries']}, search_strategy='filtered', filters={'genre': 'documentaries'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "martial arts movies",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "mystery show about a skeptical hematologist",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['mystery']}, search_strategy='filtered', filters={'genre': 'mystery'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "movie with Sam Claflin",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['sam claflin', 'with']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      },
+      {
+        "query": "movies from Canada and South Africa",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "films set in Europe and Asia",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "story of an independent baseball team",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "TV show with strong female lead characters",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['strong female', 'with']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      },
+      {
+        "query": "movies about community struggles",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "films about fashionable women in crisis",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movie set in Nantucket during summer",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "shows about middle school friendships",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Hotel",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movies featuring Logan Huffman",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['logan huffman', 'featuring']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      },
+      {
+        "query": "basketball",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Grizzy",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "documentary set in Lithuania about prisoners",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['documentary']}, search_strategy='filtered', filters={'genre': 'documentary'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "fox",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "teen pop star story",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['teen']}, search_strategy='filtered', filters={'genre': 'teen'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "Muslim activism",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "story about finding lost love",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "film with Jacob Elordi",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['jacob elordi', 'with']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      },
+      {
+        "query": "inspirational stories of athletes with disabilities",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "film with Trey Parker",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['trey parker', 'with']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      },
+      {
+        "query": "funny movies about family WhatsApp groups",
+        "intent": "QueryIntent(intent_type='MOOD', confidence=0.6, entities={'genres': ['family'], 'mood_descriptors': ['funny']}, search_strategy='semantic', filters={'genre': 'family'}, explanation='Rule-based classification: detected mood intent')"
+      },
+      {
+        "query": "grifter and swindlers in India",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Indian stand up comedy available on Netflix",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['comedy']}, search_strategy='filtered', filters={'genre': 'comedy'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "humorous take on marriage challenges",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "true stories about underdog athletes",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movies with a charming allegory for kids",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['kids']}, search_strategy='filtered', filters={'genre': 'kids'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "lighthearted series featuring global adventures and laughs",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['global adventures', 'featuring']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      },
+      {
+        "query": "redemption",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "TV program about aspiring dancers in Canada",
+        "intent": "QueryIntent(intent_type='COMPLEX', confidence=0.6, entities={'plot_elements': ['canada', 'about', 'tv', 'aspiring', 'program', 'dancers', 'in']}, search_strategy='semantic', filters={}, explanation='Rule-based classification: detected complex intent')"
+      },
+      {
+        "query": "shows about justice and wrongful convictions",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Japanese show",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "film with Christian Bale",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['christian bale', 'with']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      },
+      {
+        "query": "films about family relationships and love",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['family']}, search_strategy='filtered', filters={'genre': 'family'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "films about hidden musicians",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movies about fighting and technology",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Indian love story",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Chinese movie about a projectionist struggling financially",
+        "intent": "QueryIntent(intent_type='COMPLEX', confidence=0.6, entities={'plot_elements': ['struggling', 'movie', 'a', 'about', 'financially', 'chinese', 'projectionist']}, search_strategy='semantic', filters={}, explanation='Rule-based classification: detected complex intent')"
+      },
+      {
+        "query": "romantic comedies with drama",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['drama', 'comedies']}, search_strategy='filtered', filters={'genre': 'drama'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "Indian movies released in 2016",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "great white shark terrorizes an island",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Nigerian movies",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Black designers in the fashion industry",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movies with Larenz Tate and Meagan Good",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['larenz tate', 'with']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      }
+    ]
+  },
+  "rules_analysis": {
+    "total_queries": 50,
+    "intent_distribution": {
+      "HYBRID": 31,
+      "GENRE": 8,
+      "SPECIFIC": 8,
+      "MOOD": 1,
+      "COMPLEX": 2
+    },
+    "strategy_distribution": {
+      "hybrid": 31,
+      "filtered": 8,
+      "keyword": 8,
+      "semantic": 3
+    },
+    "avg_confidence": 0.5860000000000001,
+    "low_confidence_queries": [
+      {
+        "query": "cult dramas with a political theme",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Spanish series",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "films about saving oceans",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "martial arts movies",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movies from Canada and South Africa",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "films set in Europe and Asia",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "story of an independent baseball team",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movies about community struggles",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "films about fashionable women in crisis",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movie set in Nantucket during summer",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "shows about middle school friendships",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Hotel",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "basketball",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Grizzy",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "fox",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Muslim activism",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "story about finding lost love",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "inspirational stories of athletes with disabilities",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "grifter and swindlers in India",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "humorous take on marriage challenges",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "true stories about underdog athletes",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "redemption",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "shows about justice and wrongful convictions",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Japanese show",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "films about hidden musicians",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movies about fighting and technology",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Indian love story",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Indian movies released in 2016",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "great white shark terrorizes an island",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Nigerian movies",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Black designers in the fashion industry",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      }
+    ],
+    "results": [
+      {
+        "query": "cult dramas with a political theme",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Spanish series",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "films about saving oceans",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "documentaries about in vitro fertilization",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['documentaries']}, search_strategy='filtered', filters={'genre': 'documentaries'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "martial arts movies",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "mystery show about a skeptical hematologist",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['mystery']}, search_strategy='filtered', filters={'genre': 'mystery'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "movie with Sam Claflin",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['sam claflin', 'with']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      },
+      {
+        "query": "movies from Canada and South Africa",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "films set in Europe and Asia",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "story of an independent baseball team",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "TV show with strong female lead characters",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['strong female', 'with']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      },
+      {
+        "query": "movies about community struggles",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "films about fashionable women in crisis",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movie set in Nantucket during summer",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "shows about middle school friendships",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Hotel",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movies featuring Logan Huffman",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['logan huffman', 'featuring']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      },
+      {
+        "query": "basketball",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Grizzy",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "documentary set in Lithuania about prisoners",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['documentary']}, search_strategy='filtered', filters={'genre': 'documentary'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "fox",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "teen pop star story",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['teen']}, search_strategy='filtered', filters={'genre': 'teen'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "Muslim activism",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "story about finding lost love",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "film with Jacob Elordi",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['jacob elordi', 'with']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      },
+      {
+        "query": "inspirational stories of athletes with disabilities",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "film with Trey Parker",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['trey parker', 'with']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      },
+      {
+        "query": "funny movies about family WhatsApp groups",
+        "intent": "QueryIntent(intent_type='MOOD', confidence=0.6, entities={'genres': ['family'], 'mood_descriptors': ['funny']}, search_strategy='semantic', filters={'genre': 'family'}, explanation='Rule-based classification: detected mood intent')"
+      },
+      {
+        "query": "grifter and swindlers in India",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Indian stand up comedy available on Netflix",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['comedy']}, search_strategy='filtered', filters={'genre': 'comedy'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "humorous take on marriage challenges",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "true stories about underdog athletes",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movies with a charming allegory for kids",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['kids']}, search_strategy='filtered', filters={'genre': 'kids'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "lighthearted series featuring global adventures and laughs",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['global adventures', 'featuring']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      },
+      {
+        "query": "redemption",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "TV program about aspiring dancers in Canada",
+        "intent": "QueryIntent(intent_type='COMPLEX', confidence=0.6, entities={'plot_elements': ['canada', 'about', 'tv', 'aspiring', 'program', 'dancers', 'in']}, search_strategy='semantic', filters={}, explanation='Rule-based classification: detected complex intent')"
+      },
+      {
+        "query": "shows about justice and wrongful convictions",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Japanese show",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "film with Christian Bale",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['christian bale', 'with']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      },
+      {
+        "query": "films about family relationships and love",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['family']}, search_strategy='filtered', filters={'genre': 'family'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "films about hidden musicians",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movies about fighting and technology",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Indian love story",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Chinese movie about a projectionist struggling financially",
+        "intent": "QueryIntent(intent_type='COMPLEX', confidence=0.6, entities={'plot_elements': ['struggling', 'movie', 'a', 'about', 'financially', 'chinese', 'projectionist']}, search_strategy='semantic', filters={}, explanation='Rule-based classification: detected complex intent')"
+      },
+      {
+        "query": "romantic comedies with drama",
+        "intent": "QueryIntent(intent_type='GENRE', confidence=0.7, entities={'genres': ['drama', 'comedies']}, search_strategy='filtered', filters={'genre': 'drama'}, explanation='Rule-based classification: detected genre intent')"
+      },
+      {
+        "query": "Indian movies released in 2016",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "great white shark terrorizes an island",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Nigerian movies",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "Black designers in the fashion industry",
+        "intent": "QueryIntent(intent_type='HYBRID', confidence=0.5, entities={}, search_strategy='hybrid', filters={}, explanation='Rule-based classification: detected hybrid intent')"
+      },
+      {
+        "query": "movies with Larenz Tate and Meagan Good",
+        "intent": "QueryIntent(intent_type='SPECIFIC', confidence=0.8, entities={'actors': ['larenz tate', 'with']}, search_strategy='keyword', filters={}, explanation='Rule-based classification: detected specific intent')"
+      }
+    ]
+  }
+}
