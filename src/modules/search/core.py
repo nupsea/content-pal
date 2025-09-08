@@ -84,7 +84,12 @@ class ContentSearchSystem:
         documents = []
         for _, row in df.iterrows():
             doc = row.to_dict()
-            doc['id'] = doc.pop(id_field, row.iloc[0])
+            # Ensure we get the show_id field
+            show_id = str(doc.get(id_field, '')).strip()
+            if not show_id and id_field in doc:
+                show_id = str(doc[id_field]).strip()
+            doc['id'] = show_id
+            doc['show_id'] = show_id  # Keep both for compatibility
             doc['title'] = doc.get(title_field, '')
             doc['type'] = doc.get(type_field, '')
             documents.append(doc)

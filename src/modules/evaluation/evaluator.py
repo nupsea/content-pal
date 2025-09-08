@@ -12,16 +12,28 @@ from tqdm import tqdm
 
 from .metrics import calculate_metrics, calculate_metrics_by_category
 from ..search import ContentSearchSystem, SearchConfig
+from ..search.strategic_search import StrategicSearchSystem
+from ..search.pretrained_semantic_search import PretrainedSemanticSearch
+from ..search.pts import PretrainedSemanticSearch as PTS
+from ..search.enriched_semantic_search import EnrichedSemanticSearch
+from ..search.ultraboost_search import UltraBoostSearchSystem
+from ..search.aware_pts import SchemaAwareSemanticSearch
 from ..rag import AdaptiveRetriever
 
 
 class SearchEvaluator:
     """Comprehensive evaluator for search systems"""
     
-    def __init__(self, search_system: Union[ContentSearchSystem, AdaptiveRetriever]):
-        """Initialize with search system or adaptive retriever"""
+    def __init__(self, search_system: Union[ContentSearchSystem, AdaptiveRetriever, StrategicSearchSystem, PretrainedSemanticSearch, PTS, EnrichedSemanticSearch, UltraBoostSearchSystem, SchemaAwareSemanticSearch]):
+        """Initialize with search system, adaptive retriever, strategic search system, pretrained semantic search, enriched semantic search, or ultraboost system"""
         self.system = search_system
-        self.is_adaptive = isinstance(search_system, AdaptiveRetriever)
+        self.is_adaptive = isinstance(search_system, AdaptiveRetriever) or hasattr(search_system, 'retrieve')
+        self.is_strategic = isinstance(search_system, StrategicSearchSystem)
+        self.is_pretrained_semantic = isinstance(search_system, PretrainedSemanticSearch)
+        self.is_enriched_semantic = isinstance(search_system, EnrichedSemanticSearch)
+        self.is_pts = isinstance(search_system, PTS)
+        self.is_schema_aware = isinstance(search_system, SchemaAwareSemanticSearch)
+        self.is_ultraboost = isinstance(search_system, UltraBoostSearchSystem)
     
     def evaluate_single_query(self, query: str, gold_id: str, **kwargs) -> Dict[str, Any]:
         """Evaluate a single query"""
@@ -29,12 +41,60 @@ class SearchEvaluator:
             start_time = time.time()
             
             if self.is_adaptive:
-                # Use adaptive retriever (cast for type checking)
-                adaptive_system = cast(AdaptiveRetriever, self.system)
-                result = adaptive_system.retrieve(query, **kwargs)
-                hits = result.get('hits', [])
-                intent_info = result.get('query_intent')
-                strategy = result.get('strategy_used', 'unknown')
+                # Use adaptive retriever or system with retrieve method
+                if hasattr(self.system, 'retrieve'):
+                    result = self.system.retrieve(query, **kwargs)
+                    hits = result.get('hits', [])
+                    intent_info = result.get('query_intent')
+                    strategy = result.get('strategy_used', 'unknown')
+                else:
+                    adaptive_system = cast(AdaptiveRetriever, self.system)
+                    result = adaptive_system.retrieve(query, **kwargs)
+                    hits = result.get('hits', [])
+                    intent_info = result.get('query_intent')
+                    strategy = result.get('strategy_used', 'unknown')
+            elif self.is_strategic:
+                # Use strategic search system
+                strategic_system = cast(StrategicSearchSystem, self.system)
+                search_results = strategic_system.search(query)
+                hits = [{'_source': {'show_id': r.id}} for r in search_results]
+                intent_info = None
+                strategy = 'strategic_advanced'
+            elif self.is_pretrained_semantic:
+                # Use pretrained semantic search system
+                pretrained_system = cast(PretrainedSemanticSearch, self.system)
+                search_results = pretrained_system.search(query, top_k=kwargs.get('top_k', 50))
+                hits = [{'_source': {'show_id': r.id}} for r in search_results]
+                intent_info = None
+                strategy = 'pretrained_semantic'
+            elif self.is_pts:
+                # Use PTS system
+                pts_system = cast(PTS, self.system)
+                search_results = pts_system.search(query, top_k=kwargs.get('top_k', 50))
+                hits = [{'_source': {'show_id': r.id}} for r in search_results]
+                intent_info = None
+                strategy = 'pts'
+            elif self.is_enriched_semantic:
+                # Use enriched semantic search system
+                enriched_system = cast(EnrichedSemanticSearch, self.system)
+                search_results = enriched_system.search(query, top_k=kwargs.get('top_k', 50))
+                hits = [{'_source': {'show_id': r.id}} for r in search_results]
+                intent_info = None
+                strategy = 'enriched_semantic'
+            elif self.is_ultraboost:
+                # Use UltraBoost ensemble system
+                ultraboost_system = cast(UltraBoostSearchSystem, self.system)
+                search_results = ultraboost_system.search(query, top_k=kwargs.get('top_k', 50))
+                hits = [{'_source': {'show_id': r.id}} for r in search_results]
+                intent_info = None
+                strategy = 'ultraboost'
+            elif self.is_schema_aware:
+                # Use SchemaAwareSemanticSearch system
+                schema_system = cast(SchemaAwareSemanticSearch, self.system)
+                search_results = schema_system.search(query, top_k=kwargs.get('top_k', 50))
+                hits = [{'_source': {'show_id': r.id}} for r in search_results]
+                intent_info = None
+                strategy = 'schema_aware'
             else:
                 # Use basic search system
                 config = kwargs.get('config') or SearchConfig(
@@ -66,8 +126,8 @@ class SearchEvaluator:
                 'num_results': len(ranked_ids),
                 'query_time': query_time,
                 'strategy_used': strategy,
-                'intent_type': intent_info.intent_type.value if intent_info else 'unknown',
-                'intent_confidence': intent_info.confidence if intent_info else 0.0,
+                'intent_type': self._extract_intent_type(intent_info),
+                'intent_confidence': self._extract_intent_confidence(intent_info),
                 'success': True
             }
             
@@ -84,6 +144,38 @@ class SearchEvaluator:
                 'success': False,
                 'error': str(e)
             }
+    
+    def _extract_intent_type(self, intent_info) -> str:
+        """Extract intent type from different system types"""
+        if not intent_info:
+            return 'unknown'
+        
+        # Adaptive retriever - has .intent_type.value
+        if hasattr(intent_info, 'intent_type') and hasattr(intent_info.intent_type, 'value'):
+            return intent_info.intent_type.value
+        
+        # Semantic search - dict with method info
+        if isinstance(intent_info, dict):
+            if 'enhanced_query' in intent_info and hasattr(intent_info['enhanced_query'], 'intent'):
+                return intent_info['enhanced_query'].intent
+            return 'semantic'
+        
+        return 'unknown'
+    
+    def _extract_intent_confidence(self, intent_info) -> float:
+        """Extract confidence from different system types"""
+        if not intent_info:
+            return 0.0
+        
+        # Adaptive retriever - has .confidence
+        if hasattr(intent_info, 'confidence'):
+            return intent_info.confidence
+        
+        # Semantic search - dict with confidence info
+        if isinstance(intent_info, dict):
+            return intent_info.get('confidence', 0.0)
+        
+        return 0.0
     
     def evaluate_queries(self, queries: Dict[str, List[str]], 
                         max_queries: Optional[int] = None,
@@ -207,8 +299,6 @@ class SearchEvaluator:
         
         for i, config in enumerate(configs):
             config_name = config_names[i]
-            print(f"\nEvaluating configuration: {config_name}")
-            
             result = self.evaluate_queries(queries, **config)
             comparison_results[config_name] = result
         
@@ -239,37 +329,11 @@ class SearchEvaluator:
         print(f"Results saved to: {output_path}")
     
     def print_summary(self, results: Dict[str, Any]) -> None:
-        """Print a summary of evaluation results"""
-        print("\n" + "="*70)
-        print("EVALUATION SUMMARY")
-        print("="*70)
-        
+        """Print a concise summary of evaluation results"""
         summary = results['summary']
         overall = results['overall_metrics']
         
         print(f"\nSystem: {summary['system_type']}")
-        print(f"Total queries: {summary['total_queries']:,}")
-        print(f"Successful: {summary['successful_queries']:,}")
-        print(f"Failed: {summary['failed_queries']:,}")
-        print(f"Zero results: {summary['zero_result_queries']:,}")
-        print(f"Avg query time: {summary['avg_query_time_ms']:.1f}ms")
-        
-        print(f"\nOVERALL PERFORMANCE:")
-        print(f"  Hit Rate@1:  {overall.get('hit_rate_at_1', 0):.4f}")
-        print(f"  Hit Rate@5:  {overall.get('hit_rate_at_5', 0):.4f}")
-        print(f"  Hit Rate@10: {overall.get('hit_rate_at_10', 0):.4f}")
-        print(f"  MRR@10:      {overall.get('mrr_at_10', 0):.4f}")
-        
-        # Intent breakdown if available
-        if results.get('metrics_by_intent'):
-            print(f"\nPERFORMANCE BY INTENT:")
-            print(f"{'Intent':<15} {'Count':<6} {'HR@10':<8} {'MRR@10':<8}")
-            print("-" * 40)
-            
-            for intent, metrics in results['metrics_by_intent'].items():
-                count = int(metrics.get('total_queries', 0))
-                hr10 = metrics.get('hit_rate_at_10', 0)
-                mrr10 = metrics.get('mrr_at_10', 0)
-                print(f"{intent:<15} {count:<6} {hr10:<8.4f} {mrr10:<8.4f}")
-        
-        print("\n" + "="*70)
+        print(f"Queries: {summary['successful_queries']:,}/{summary['total_queries']:,}")
+        print(f"HR@10: {overall.get('hit_rate_at_10', 0):.3f} | MRR@10: {overall.get('mrr_at_10', 0):.3f}")
+        print(f"Avg time: {summary['avg_query_time_ms']:.0f}ms")

@@ -12,9 +12,12 @@ minsearch = "*"
 lightgbm = "*"
 scikit-learn = "*"
 datasets = "*"
-transformers = {extras = ["torch"], version = "*"}
 sentence-transformers = "*"
 spacy = "*"
+transformers = "*"
+keybert = "*"
+wikipedia-api = "*"
+beautifulsoup4 = "*"
 
 [dev-packages]
 tqdm = "*"

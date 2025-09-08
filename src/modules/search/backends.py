@@ -41,13 +41,16 @@ class MinSearchBackend(SearchBackend):
         # Convert to standardized format
         search_results = []
         for result in results:
+            # Force canonical doc ID to show_id from CSV
+            sid = str(result.get("show_id", "")).strip()
+            
             # Separate core fields from metadata
-            core_fields = {'id', 'title', 'type'}
+            core_fields = {'id', 'show_id', 'title', 'type'}
             metadata = {k: v for k, v in result.items() if k not in core_fields}
             
             search_results.append(SearchResult(
-                id=result['id'],
-                title=result['title'],
+                id=sid,  # Force canonical doc id
+                title=result.get('title', ''),
                 score=1.0,  # MinSearch doesn't provide scores
                 content_type=result.get('type', ''),
                 metadata=metadata
@@ -173,8 +176,8 @@ class OpenSearchBackend(SearchBackend):
         search_results = []
         for hit in hits:
             source = hit.get('_source', {})
-            # Use show_id as primary ID for Netflix data
-            doc_id = source.get('show_id') or source.get('id') or hit.get('_id', '')
+            # Force canonical doc ID to show_id from CSV
+            sid = str(source.get("show_id", "")).strip()
             title = source.get('title', '')
             content_type = source.get('type', '')
             score = hit.get('_score', 0.0)
@@ -184,7 +187,7 @@ class OpenSearchBackend(SearchBackend):
             metadata = {k: v for k, v in source.items() if k not in core_fields}
             
             search_results.append(SearchResult(
-                id=doc_id,
+                id=sid,  # Force canonical doc id
                 title=title,
                 score=score,
                 content_type=content_type,
