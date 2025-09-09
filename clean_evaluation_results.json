@@ -1,0 +1,62 @@
+{
+  "SchemaAwareSemanticSearch": {
+    "summary": {
+      "total_queries": 500,
+      "successful_queries": 500,
+      "failed_queries": 0,
+      "zero_result_queries": 0,
+      "avg_query_time_ms": 4588.421859264374,
+      "system_type": "basic"
+    },
+    "overall_metrics": {
+      "hit_rate_at_1": 0.208,
+      "mrr_at_1": 0.208,
+      "hit_rate_at_5": 0.338,
+      "mrr_at_5": 0.2589666666666667,
+      "hit_rate_at_10": 0.38,
+      "mrr_at_10": 0.2645365079365079,
+      "total_queries": 500
+    },
+    "system_name": "SchemaAwareSemanticSearch"
+  },
+  "SimpleEffectiveSearch": {
+    "summary": {
+      "total_queries": 500,
+      "successful_queries": 500,
+      "failed_queries": 0,
+      "zero_result_queries": 0,
+      "avg_query_time_ms": 1163.9972009658813,
+      "system_type": "basic"
+    },
+    "overall_metrics": {
+      "hit_rate_at_1": 0.172,
+      "mrr_at_1": 0.172,
+      "hit_rate_at_5": 0.3,
+      "mrr_at_5": 0.21673333333333333,
+      "hit_rate_at_10": 0.326,
+      "mrr_at_10": 0.22016111111111109,
+      "total_queries": 500
+    },
+    "system_name": "SimpleEffectiveSearch"
+  },
+  "UltraBoostSearch": {
+    "summary": {
+      "total_queries": 500,
+      "successful_queries": 500,
+      "failed_queries": 0,
+      "zero_result_queries": 0,
+      "avg_query_time_ms": 4016.8667626380916,
+      "system_type": "basic"
+    },
+    "overall_metrics": {
+      "hit_rate_at_1": 0.186,
+      "mrr_at_1": 0.186,
+      "hit_rate_at_5": 0.308,
+      "mrr_at_5": 0.2296333333333333,
+      "hit_rate_at_10": 0.346,
+      "mrr_at_10": 0.23466349206349205,
+      "total_queries": 500
+    },
+    "system_name": "UltraBoostSearch"
+  }
+}

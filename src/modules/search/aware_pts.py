@@ -104,7 +104,7 @@ class SchemaAwareSemanticSearch:
             for n in cast + directors:
                 if n: self.vocab["people"].add(n.lower())
 
-        # Optional dense head build (kept OFF unless you pass use_dense_head=True)
+        # Optional dense head build (kept OFF unless use_dense_head=True is passed)
         if self.use_dense_head:
             try:
                 from sentence_transformers import SentenceTransformer

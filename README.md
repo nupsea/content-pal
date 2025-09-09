@@ -11,8 +11,8 @@ Package Mangaer: pipenv (in case of any others the instructions need to change a
 Install the required libraries.
 
 ```
-pipenv install openai scikit-learn pandas flask opensearch-py sentence-transformers lightgbm scikit-learn datasets transformers[torch] 
-pipenv install --dev tqdm ipywidgets python-dotenv minsearch
+pipenv install openai scikit-learn pandas flask minsearch opensearch-py sentence-transformers lightgbm scikit-learn   
+pipenv install --dev tqdm ipywidgets python-dotenv  transformers[torch] datasets
 
 # TODO check streamlit
 
@@ -33,7 +33,7 @@ Install Minsearch
 pipenv install minsearch
 ```
 
-#### Opensearch 
+#### Opensearch (Optional)
 
 Search Engine Start with Docker-Compose
 ```sh
@@ -53,66 +53,65 @@ You should see something like the below :
 ### Execution steps
 
 
-#### Search Options Evaluation
+## Ingestion and Indexing
+
+
+## Evaluation
+
+### Retrieval Evaluation
+
+Initially evaluated the search results with basic search engines (minsearch and opensearch) and then used both keyword based and vector based search using BM25 and ANN (Approximate Nearest Neighbors) based search.
+Refer `notebooks/analysis.ipynb` for details.
+
+
+Later in order to improve the search quality, used pretraining models and cross-encoders to rerank the results. Also, used different strategies and combinations to acheive better results.
 
 ```zsh
-pipenv run python src/run_comprehensive_evaluation.py
-
+❯ pipenv run python src/run_clean_evaluation.py
 Loading .env environment variables...
-COMPREHENSIVE EVALUATION
+CLEAN COMPREHENSIVE EVALUATION
 ============================================================
-Loading dataset from data/netflix_titles_cleaned.csv...
-Sampled 1000 assets
-Generated ground truth for 1000 assets
-Total queries: 12000
-Saved to: comprehensive_ground_truth.json
-Created evaluation subset:
-  Assets: 200
-  Total queries: 2,400
+[OK] Loaded ground truth: 1000 unique assets
+[OK] Created evaluation subset: 200 assets
+..
 
-Testing: MinSearch_Default
-Evaluating: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [00:01<00:00, 418.53it/s]
-MinSearch_Default - HR@10: 0.6940, MRR@10: 0.5613, Time: 9.6ms
 
-Testing: MinSearch_Optimized
-Evaluating: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [00:01<00:00, 386.61it/s]
-MinSearch_Optimized - HR@10: 0.7280, MRR@10: 0.5777, Time: 10.4ms
+SchemaAwareSemanticSearch:
+  Total Queries: 500
+  Successful Queries: 500
+  Hit Rate @ 10: 38.0%
+  MRR @ 10: 26.5%
+  Avg Query Time: 4588.4ms
 
-Testing: Adaptive_Default
-Evaluating: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [00:01<00:00, 409.32it/s]
-Adaptive_Default - HR@10: 0.8620, MRR@10: 0.6160, Time: 9.8ms
+SimpleEffectiveSearch:
+  Total Queries: 500
+  Successful Queries: 500
+  Hit Rate @ 10: 32.6%
+  MRR @ 10: 22.0%
+  Avg Query Time: 1164.0ms
 
-Testing: OpenSearch_Hybrid
+UltraBoostSearch:
+  Total Queries: 500
+  Successful Queries: 500
+  Hit Rate @ 10: 34.6%
+  MRR @ 10: 23.5%
+  Avg Query Time: 4016.9ms
 
-Evaluating: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [00:24<00:00, 20.35it/s]
-OpenSearch_Hybrid - HR@10: 0.3960, MRR@10: 0.2914, Time: 196.2ms
-
-================================================================================
-COMPREHENSIVE EVALUATION RESULTS
-================================================================================
-
-Configuration        HR@1     HR@5     HR@10    MRR@10   Avg Time  
---------------------------------------------------------------------------------
-MinSearch_Default    0.5100   0.6180   0.6940   0.5613   9.6       
-MinSearch_Optimized  0.5140   0.6580   0.7280   0.5777   10.4      
-Adaptive_Default     0.5140   0.7680   0.8620   0.6160   9.8       
-OpenSearch_Hybrid    0.2120   0.3900   0.3960   0.2914   196.2     
-
-BEST CONFIGURATION: Adaptive_Default (MRR@10: 0.6160)
-
-================================================================================
-DETAILED ANALYSIS: Adaptive_Default
-================================================================================
-
-Performance by Intent Type:
-Intent          Count  HR@10    MRR@10  
-----------------------------------------
-genre_search    88     0.9205   0.8750  
-title_search    249    0.7992   0.5215  
-actor_search    106    0.9623   0.4965  
-unknown         53     0.8868   0.8774  
-director_search 2      1.0000   1.0000  
-year_search     2      0.0000   0.0000  
-
-Results saved to: comprehensive_evaluation_results.json
 ```
+
+### RAG Flow Evaluation
+
+Used LLM-as-a-Judge metric to evaluate the content results.
+
+Among 100 sampled queries, obtained:
+
+* RELEVANT:         48%
+* PARTIAL_RELEVANT: 39%
+* NOT_RELEVANT:     13% 
+
+Refer `notebooks/rag_flow.ipynb` for details.
+
+
+## Monitoring
+
+
