@@ -21,7 +21,7 @@ from modules.search.enriched_semantic_search import EnrichedSemanticSearch
 from modules.search.simple_effective_search import SimpleEffectiveSearch
 from modules.search.ultraboost_search import UltraBoostSearchSystem
 from modules.search.cross_encoder_reranker import get_cross_encoder_reranker, prepare_cross_encoder_reranking
-from modules.rag import AdaptiveRetriever
+# Legacy RAG import removed - not used in current evaluation
 from modules.evaluation import SearchEvaluator, GroundTruthGenerator
 
 

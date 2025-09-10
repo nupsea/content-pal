@@ -14,7 +14,7 @@ from modules.search.strategic_search import StrategicSearchSystem, StrategicSear
 from modules.search.pretrained_semantic_search import PretrainedSemanticSearch
 from modules.search.enriched_semantic_search import EnrichedSemanticSearch
 from modules.search.cross_encoder_reranker import get_cross_encoder_reranker, prepare_cross_encoder_reranking
-from modules.rag import AdaptiveRetriever
+from modules.rag_old import AdaptiveRetriever
 from modules.evaluation import SearchEvaluator
 
 
@@ -112,7 +112,7 @@ def run_focused_evaluation():
                 
             elif config["system_type"] == "adaptive_enhanced":
                 # Adaptive search enhanced with cross-encoder reranking
-                from modules.rag import AdaptiveRetriever
+                from modules.rag_old import AdaptiveRetriever
                 
                 base_system = AdaptiveRetriever(backend_type="minsearch")
                 base_system.index_data(csv_path=csv_path)
@@ -424,7 +424,7 @@ def run_focused_evaluation():
                 # Ultimate max-recall system for >50% performance
                 from modules.search.enriched_semantic_search import EnrichedSemanticSearch
                 from modules.search.pretrained_semantic_search import PretrainedSemanticSearch
-                from modules.rag import AdaptiveRetriever
+                from modules.rag_old import AdaptiveRetriever
                 from modules.search.enhanced_search import EnhancedSearchSystem
                 
                 class MaxRecallUltimateSystem:

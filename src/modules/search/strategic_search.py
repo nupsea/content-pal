@@ -11,7 +11,7 @@ from collections import defaultdict
 
 from .core import ContentSearchSystem, SearchConfig, SearchResult
 from .cross_encoder_reranker import get_cross_encoder_reranker, prepare_cross_encoder_reranking
-from ..rag import AdaptiveRetriever
+from ..rag_old import AdaptiveRetriever
 
 
 @dataclass

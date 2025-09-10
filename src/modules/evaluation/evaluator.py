@@ -18,7 +18,7 @@ from ..search.pts import PretrainedSemanticSearch as PTS
 from ..search.enriched_semantic_search import EnrichedSemanticSearch
 from ..search.ultraboost_search import UltraBoostSearchSystem
 from ..search.aware_pts import SchemaAwareSemanticSearch
-from ..rag import AdaptiveRetriever
+from ..rag_old import AdaptiveRetriever
 
 
 class SearchEvaluator:
