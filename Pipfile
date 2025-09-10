@@ -18,12 +18,15 @@ transformers = "*"
 keybert = "*"
 wikipedia-api = "*"
 beautifulsoup4 = "*"
+psycopg2-binary = "*"
+gunicorn = "*"
 
 [dev-packages]
 tqdm = "*"
 ipywidgets = "*"
 ipykernel = "*"
 python-dotenv = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.11"

@@ -5,16 +5,16 @@
       "successful_queries": 500,
       "failed_queries": 0,
       "zero_result_queries": 0,
-      "avg_query_time_ms": 4588.421859264374,
+      "avg_query_time_ms": 24448.654403686523,
       "system_type": "basic"
     },
     "overall_metrics": {
-      "hit_rate_at_1": 0.208,
-      "mrr_at_1": 0.208,
-      "hit_rate_at_5": 0.338,
-      "mrr_at_5": 0.2589666666666667,
-      "hit_rate_at_10": 0.38,
-      "mrr_at_10": 0.2645365079365079,
+      "hit_rate_at_1": 0.23,
+      "mrr_at_1": 0.23,
+      "hit_rate_at_5": 0.362,
+      "mrr_at_5": 0.28263333333333335,
+      "hit_rate_at_10": 0.4,
+      "mrr_at_10": 0.28761984126984125,
       "total_queries": 500
     },
     "system_name": "SchemaAwareSemanticSearch"
@@ -25,7 +25,7 @@
       "successful_queries": 500,
       "failed_queries": 0,
       "zero_result_queries": 0,
-      "avg_query_time_ms": 1163.9972009658813,
+      "avg_query_time_ms": 10369.743430614471,
       "system_type": "basic"
     },
     "overall_metrics": {
@@ -45,7 +45,7 @@
       "successful_queries": 500,
       "failed_queries": 0,
       "zero_result_queries": 0,
-      "avg_query_time_ms": 4016.8667626380916,
+      "avg_query_time_ms": 4045.6474189758296,
       "system_type": "basic"
     },
     "overall_metrics": {

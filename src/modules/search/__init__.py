@@ -9,6 +9,8 @@ from .ultraboost_search import UltraBoostSearchSystem
 from .pretrained_semantic_search import PretrainedSemanticSearch
 from .enriched_semantic_search import EnrichedSemanticSearch
 from .strategic_search import StrategicSearchSystem
+from .query_classifier import QueryClassifier, IntentType
+from .adaptive_retriever import AdaptiveRetriever
 
 __all__ = [
     'SearchBackend', 
@@ -21,5 +23,8 @@ __all__ = [
     'UltraBoostSearchSystem',
     'PretrainedSemanticSearch',
     'EnrichedSemanticSearch',
-    'StrategicSearchSystem'
+    'StrategicSearchSystem',
+    'QueryClassifier',
+    'IntentType',
+    'AdaptiveRetriever'
 ]

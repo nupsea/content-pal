@@ -3,7 +3,7 @@ Adaptive retriever that uses query classification to optimize search strategy
 """
 
 from typing import Dict, List, Any, Optional
-from ..search import ContentSearchSystem, SearchConfig
+from .core import ContentSearchSystem, SearchConfig
 from .query_classifier import QueryClassifier, IntentType
 
 

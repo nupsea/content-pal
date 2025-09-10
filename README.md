@@ -11,8 +11,9 @@ Package Mangaer: pipenv (in case of any others the instructions need to change a
 Install the required libraries.
 
 ```
-pipenv install openai scikit-learn pandas flask minsearch opensearch-py sentence-transformers lightgbm scikit-learn   
-pipenv install --dev tqdm ipywidgets python-dotenv  transformers[torch] datasets
+pipenv install openai scikit-learn pandas flask minsearch opensearch-py sentence-transformers lightgbm scikit-learn psycopg2-binary  sqlalchemy sqlalchemy-utils python-multipart flask-cors gunicorn
+```
+pipenv install --dev tqdm ipywidgets python-dotenv transformers[torch] datasets
 
 # TODO check streamlit
 
@@ -131,6 +132,12 @@ To start the Flask server, run the following command:
 
 pipenv run python -m src.modules.workflow.app
 ```
+
+or better with Docker
+```
+docker-compose up -d api
+```
+
 
 From a new terminal, you can interact with the API using curl or any API client like Postman.
 ```zsh

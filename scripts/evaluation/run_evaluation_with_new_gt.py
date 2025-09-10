@@ -12,7 +12,7 @@ sys.path.append(str(Path(__file__).parent / "src"))
 
 from modules.search import ContentSearchSystem
 from modules.search.semantic_search import SemanticSearchSystem
-from modules.rag_old import AdaptiveRetriever
+from modules.search import AdaptiveRetriever
 from modules.evaluation import SearchEvaluator
 
 def run_evaluation_with_new_ground_truth():

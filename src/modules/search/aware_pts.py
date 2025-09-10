@@ -236,6 +236,185 @@ class SchemaAwareSemanticSearch:
                 dedup.append(x); seen.add(x)
         return (qx + " " + " ".join(dedup)).strip() if dedup else qx
 
+    # ---------- entity-field detection ----------
+    def _extract_entities(self, q: str) -> Dict[str, List[str]]:
+        """Extract entities and their target fields from query"""
+        q_lower = q.lower()
+        entities = {
+            'directors': [],
+            'actors': [],
+            'genres': [],
+            'years': []
+        }
+        
+        # Director patterns - more comprehensive
+        director_patterns = [
+            r"directed by ([^,\.]+)",
+            r"director ([^,\.]+)", 
+            r"films? by ([^,\.]+)",
+            r"movies? by ([^,\.]+)"
+        ]
+        
+        # Special patterns for "Name films/movies" - use original query for proper case detection
+        name_patterns = [
+            r"\b([A-Z][a-z]+ [A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+films?$",     # "Christopher Nolan films"
+            r"\b([A-Z][a-z]+ [A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+movies?$"     # "Christopher Nolan movies" 
+        ]
+        
+        for pattern in director_patterns:
+            matches = re.findall(pattern, q_lower)
+            entities['directors'].extend([m.strip() for m in matches if m.strip()])
+        
+        # Check name patterns on original query (with proper capitalization)
+        for pattern in name_patterns:
+            matches = re.findall(pattern, q)
+            entities['directors'].extend([m.strip() for m in matches if m.strip()])
+        
+        # Actor patterns (only if not already detected as director)
+        if not entities['directors']:  # Only check for actors if no directors found
+            actor_patterns = [
+                r"starring ([^,\.]+)",
+                r"with ([^,\.]+)", 
+                r"featuring ([^,\.]+)"
+            ]
+            
+            # Special patterns for "Name movies/films" - use original query for proper case detection
+            actor_name_patterns = [
+                r"\b([A-Z][a-z]+ [A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+movies?$",  # "Leonardo DiCaprio movies"
+                r"\b([A-Z][a-z]+ [A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+films?$"    # "Tom Hanks films"
+            ]
+            
+            for pattern in actor_patterns:
+                matches = re.findall(pattern, q_lower)
+                for match in matches:
+                    name = match.strip()
+                    # Only add if it looks like a person name (2+ words, reasonable length)
+                    if len(name.split()) >= 2 and 3 <= len(name) <= 30:
+                        entities['actors'].append(name)
+            
+            # Check actor name patterns on original query (with proper capitalization)
+            for pattern in actor_name_patterns:
+                matches = re.findall(pattern, q)
+                entities['actors'].extend([m.strip() for m in matches if m.strip()])
+        
+        # Genre detection (using existing vocab)
+        for genre in self.vocab.get("genres", []):
+            if genre in q_lower:
+                entities['genres'].append(genre)
+        
+        # Year detection - more comprehensive
+        year_patterns = [
+            r'\b(19\d{2})\b',  # 1900s years
+            r'\b(20\d{2})\b',  # 2000s years
+            r'\b(19\d{2})-(20\d{2})\b',  # Year ranges like 1999-2005
+        ]
+        
+        for pattern in year_patterns:
+            matches = re.findall(pattern, q)
+            for match in matches:
+                if isinstance(match, tuple):
+                    entities['years'].extend([y for y in match if y])
+                else:
+                    entities['years'].append(match)
+        
+        # Temporal constraints detection
+        temporal_constraints = {}
+        if 'before' in q_lower or 'prior to' in q_lower:
+            # Extract year after "before" or "prior to"
+            before_patterns = [
+                r'(?:before|prior to)\s+(\d{4})',
+                r'(?:before|prior to)\s+the year\s+(\d{4})'
+            ]
+            for pattern in before_patterns:
+                matches = re.findall(pattern, q_lower)
+                if matches:
+                    temporal_constraints['before'] = int(matches[0])
+                    break
+        
+        if 'after' in q_lower or 'since' in q_lower:
+            after_patterns = [
+                r'(?:after|since)\s+(\d{4})',
+                r'(?:after|since)\s+the year\s+(\d{4})'
+            ]
+            for pattern in after_patterns:
+                matches = re.findall(pattern, q_lower)
+                if matches:
+                    temporal_constraints['after'] = int(matches[0])
+                    break
+        
+        entities['temporal_constraints'] = temporal_constraints
+        
+        # Clean duplicates (but preserve temporal_constraints dict)
+        for key in entities:
+            if key != 'temporal_constraints' and isinstance(entities[key], list):
+                entities[key] = list(dict.fromkeys(entities[key]))
+            
+        return entities
+    
+    def _create_entity_searches(self, entities: Dict[str, List[str]], base_query: str) -> List[Tuple[str, str, SearchConfig]]:
+        """Create targeted searches for detected entities"""
+        entity_searches = []
+        
+        # Director-specific searches
+        for director in entities['directors']:
+            query = f'director:"{director}" OR {director}'
+            config = SearchConfig(
+                boost_weights={"director": 20.0, "title": 2.0, "cast": 1.0, "description": 1.0},
+                max_results=50
+            )
+            entity_searches.append((f"director_{director}", query, config))
+        
+        # Actor-specific searches  
+        for actor in entities['actors']:
+            query = f'cast:"{actor}" OR {actor}'
+            config = SearchConfig(
+                boost_weights={"cast": 20.0, "title": 2.0, "director": 1.0, "description": 1.0}, 
+                max_results=50
+            )
+            entity_searches.append((f"actor_{actor}", query, config))
+            
+        # Year/temporal constraint searches
+        temporal_constraints = entities.get('temporal_constraints', {})
+        if temporal_constraints:
+            query_parts = []
+            
+            if 'before' in temporal_constraints:
+                year = temporal_constraints['before']
+                query_parts.append(f"release_year:[* TO {year-1}]")
+            
+            if 'after' in temporal_constraints:
+                year = temporal_constraints['after']  
+                query_parts.append(f"release_year:[{year+1} TO *]")
+                
+            if query_parts:
+                temporal_query = " AND ".join(query_parts)
+                config = SearchConfig(
+                    boost_weights={"release_year": 10.0, "title": 2.0, "description": 1.0},
+                    max_results=50
+                )
+                entity_searches.append(("temporal_constraint", temporal_query, config))
+        
+        # Explicit year searches
+        for year in entities['years']:
+            if year.isdigit() and len(year) == 4:
+                query = f'release_year:{year}'
+                config = SearchConfig(
+                    boost_weights={"release_year": 15.0, "title": 2.0, "description": 1.0},
+                    max_results=50
+                )
+                entity_searches.append((f"year_{year}", query, config))
+
+        # Genre-specific searches
+        for genre in entities['genres']:
+            query = f'listed_in:"{genre}" OR {genre}'
+            config = SearchConfig(
+                boost_weights={"listed_in": 15.0, "title": 3.0, "description": 2.0},
+                max_results=50
+            )
+            entity_searches.append((f"genre_{genre}", query, config))
+        
+        return entity_searches
+
     # ---------------- multi-head retrieval ----------------
     def _heads(self) -> List[Tuple[str, SearchConfig]]:
         K = self.per_head_k
@@ -274,8 +453,12 @@ class SchemaAwareSemanticSearch:
     def _candidates(self, q: str) -> List[SearchResult]:
         # schema-driven expansion
         qx, signals = self._schema_expand(q)
+        
+        # entity detection for field-specific search
+        entities = self._extract_entities(q)
+        has_entities = any(entities.values())
 
-        # primary heads
+        # primary heads (standard semantic search)
         lists = []
         head_cfgs = self._heads()
         # run plot head first to feed PRF
@@ -289,7 +472,49 @@ class SchemaAwareSemanticSearch:
             res = self.base.search(qx_prf, cfg) or []
             lists.append(res)
 
-        fused = self._rrf(lists)
+        # entity-specific searches (if entities detected)
+        entity_results = []
+        entity_search_count = 0
+        if has_entities:
+            entity_searches = self._create_entity_searches(entities, qx_prf)
+            for search_name, entity_query, entity_config in entity_searches:
+                try:
+                    entity_res = self.base.search(entity_query, entity_config) or []
+                    if entity_res:  # Only add if we got results
+                        entity_results.extend(entity_res)
+                        lists.append(entity_res)
+                        entity_search_count += 1
+                except:
+                    # Fallback to simple search if field queries fail
+                    simple_query = entity_query.split(' OR ')[1] if ' OR ' in entity_query else entity_query
+                    entity_res = self.base.search(simple_query, entity_config) or []
+                    if entity_res:
+                        entity_results.extend(entity_res)
+                        lists.append(entity_res)
+                        entity_search_count += 1
+
+        # Prioritize entity results when entities are detected
+        if has_entities and entity_results:
+            # Deduplicate entity results and sort by score
+            entity_by_id = {}
+            for result in entity_results:
+                if result.id not in entity_by_id or result.score > entity_by_id[result.id].score:
+                    entity_by_id[result.id] = result
+            
+            entity_priority = sorted(entity_by_id.values(), key=lambda x: -x.score)[:20]
+            
+            # Get regular search results (excluding entity searches from lists)
+            regular_lists = lists[:-entity_search_count] if entity_search_count > 0 else lists
+            regular_fused = self._rrf(regular_lists)
+            
+            # Remove entity results from regular results to avoid duplicates
+            entity_ids = {r.id for r in entity_priority}
+            regular_remaining = [r for r in regular_fused if r.id not in entity_ids]
+            
+            # Combine: entity results first, then regular results
+            fused = entity_priority + regular_remaining
+        else:
+            fused = self._rrf(lists)
 
         # optional dense union
         if self.use_dense_head:
@@ -313,22 +538,95 @@ class SchemaAwareSemanticSearch:
     def _ce_rerank(self, query: str, cands: List[SearchResult], top_k: int) -> List[SearchResult]:
         if not self.ce or not cands:
             return cands[:top_k]
+        
+        # Check if this is an entity query that should preserve entity matches
+        entities = self._extract_entities(query)
+        has_entity_constraints = any(entities.values())
+        
         pairs, keep = [], []
         for c in cands:
             d = self.docs.get(c.id)
             if not d: continue
             pairs.append([query, d["text"]])
             keep.append(c)
+        
         scores = [float(s) for s in self.ce.predict(pairs, batch_size=64, show_progress_bar=False)]
         ce_n = self._minmax(scores)
         base_n = self._minmax([float(getattr(c, "score", 0.0)) for c in keep])
         a = self.alpha
+        
+        # Separate entity matches from non-entity matches
+        entity_matches = []
+        non_entity_matches = []
+        
         for i, c in enumerate(keep):
-            c.score = a * ce_n[i] + (1 - a) * base_n[i]
-        keep.sort(key=lambda s: (-s.score,
-                                 -int(self.docs.get(s.id,{}).get("meta",{}).get("release_year",-1) or -1),
-                                 str(self.docs.get(s.id,{}).get("title","")).lower()))
-        return keep[:top_k]
+            # Calculate base CE score
+            base_score = a * ce_n[i] + (1 - a) * base_n[i]
+            c.score = base_score
+            
+            # Check if this result matches detected entities
+            is_entity_match = False
+            if has_entity_constraints:
+                metadata = c.metadata
+                
+                # Check for director matches
+                for director in entities.get('directors', []):
+                    if director.lower() in metadata.get('director', '').lower():
+                        is_entity_match = True
+                        break
+                
+                # Check for actor matches
+                if not is_entity_match:
+                    for actor in entities.get('actors', []):
+                        if actor.lower() in metadata.get('cast', '').lower():
+                            is_entity_match = True
+                            break
+                
+                # Check for temporal constraint matches
+                if not is_entity_match:
+                    temporal_constraints = entities.get('temporal_constraints', {})
+                    if temporal_constraints and 'release_year' in metadata:
+                        try:
+                            movie_year = int(metadata['release_year'])
+                            
+                            # Check "before" constraint
+                            if 'before' in temporal_constraints:
+                                if movie_year < temporal_constraints['before']:
+                                    is_entity_match = True
+                            
+                            # Check "after" constraint
+                            elif 'after' in temporal_constraints:
+                                if movie_year > temporal_constraints['after']:
+                                    is_entity_match = True
+                        except (ValueError, TypeError):
+                            pass  # Skip if year is not a valid number
+            
+            # Categorize results
+            if is_entity_match:
+                entity_matches.append(c)
+            else:
+                non_entity_matches.append(c)
+        
+        # Sort each category by CE score
+        entity_matches.sort(key=lambda s: (-s.score,
+                                         -int(self.docs.get(s.id,{}).get("meta",{}).get("release_year",-1) or -1),
+                                         str(self.docs.get(s.id,{}).get("title","")).lower()))
+        
+        non_entity_matches.sort(key=lambda s: (-s.score,
+                                             -int(self.docs.get(s.id,{}).get("meta",{}).get("release_year",-1) or -1),
+                                             str(self.docs.get(s.id,{}).get("title","")).lower()))
+        
+        # Combine: entity matches first (up to 3), then best semantic matches
+        if has_entity_constraints and entity_matches:
+            # Take top 3 entity matches, then fill with semantic matches
+            result = entity_matches[:3] + non_entity_matches[:top_k-len(entity_matches[:3])]
+            return result[:top_k]
+        else:
+            # No entity constraints, return normal CE ranking
+            keep.sort(key=lambda s: (-s.score,
+                                   -int(self.docs.get(s.id,{}).get("meta",{}).get("release_year",-1) or -1),
+                                   str(self.docs.get(s.id,{}).get("title","")).lower()))
+            return keep[:top_k]
 
     # ---------------- public ----------------
     def search(self, query: str, top_k: int = 50) -> List[SearchResult]:
