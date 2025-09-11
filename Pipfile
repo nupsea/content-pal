@@ -20,6 +20,7 @@ wikipedia-api = "*"
 beautifulsoup4 = "*"
 psycopg2-binary = "*"
 gunicorn = "*"
+questionary = "*"
 
 [dev-packages]
 tqdm = "*"

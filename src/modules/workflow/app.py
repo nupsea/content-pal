@@ -16,6 +16,9 @@ def recommend():
     
     recommendations = rag(query)
     db.save_conversation(conversation_id, query, recommendations)
+    
+    # Add conversation_id to response for feedback
+    recommendations["conversation_id"] = conversation_id
     return jsonify(recommendations)
 
 

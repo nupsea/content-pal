@@ -75,11 +75,23 @@ Success! Response:
 ### Docker Compose
 
 This should bring up the entire application stack including Opensearch and the Flask app.
+- Appliction (port 5001)
+- Opensearch (port 9200)
+- Opensearch Dashboards (port 5601)
+- Postgres (port 5432)
+- Grafana (port 3000)
+
 
 ```zsh
-docker-compose up -d
+source .env && docker-compose up -d
 
 ```
+
+#### CLI App to test
+```zsh
+pipenv run python -m src.modules.workflow.cli
+```
+
 
 
 #### Opensearch (Optional)
