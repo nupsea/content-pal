@@ -5,12 +5,14 @@ import argparse
 parser = argparse.ArgumentParser(description='Test Content-Pal API')
 parser.add_argument('--query', '-q', default="Tom Cruise movies", 
                    help='Search query (default: "Tom Cruise movies")')
+parser.add_argument('--port', '-p', default="5000", 
+                   help='Port number (default: 5000)')
 args = parser.parse_args()
 
 query = args.query
 print("User Query:", query)
 
-url = "http://127.0.0.1:5001/recommend"
+url = f"http://127.0.0.1:{args.port}/recommend"
 
 try:
     print(f"Making request to {url}...")

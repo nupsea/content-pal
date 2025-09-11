@@ -34,6 +34,36 @@ Install Minsearch
 pipenv install minsearch
 ```
 
+## Running it with Docker
+
+The entire application can be run using Docker and Docker-Compose.
+Make sure you have Docker and Docker-Compose installed on your machine.
+
+If you need to change some environment variables, you can do so in the `.env` file and
+correspondingly build DockerFile. 
+
+```zsh
+docker build -t content-pal .
+
+source .env && 
+docker run -it --rm \
+  -e OPENAI_API_KEY=$OPENAI_API_KEY \
+  -e DATA_PATH="data/netflix_titles_enriched_full.csv" \
+  -p 5001:5000 \
+  content-pal
+```
+
+### Testing with app
+You can test the API using curl or any API client like Postman.
+```zsh
+curl -X POST "http://localhost:5001/recommend" -H "Content-Type: application/json" -d '{"query": "Recommend me some sci-fi movies"}'
+```
+Or Alternatively, you can use the provided `test.py` script to test the API.
+```zsh
+pipenv run python -m src.modules.workflow.test -p 5001
+```
+
+
 #### Opensearch (Optional)
 
 Search Engine Start with Docker-Compose
@@ -122,49 +152,6 @@ Among 100 sampled queries, obtained:
 Refer `notebooks/rag_flow.ipynb` for details.
 
 
-## Usage
-
-### CLI with Flask
-
-To start the Flask server, run the following command:
-
-```zsh
-
-pipenv run python -m src.modules.workflow.app
-```
-
-or better with Docker
-```
-docker-compose up -d api
-```
-
-
-From a new terminal, you can interact with the API using curl or any API client like Postman.
-```zsh
-❯ curl -X POST \
--H "Content-Type: application/json" \
--d '{"query": "Mind bending shows or movies"}' \
-http://127.0.0.1:5000/recommend
-"{\n  \"catalog_recommendations\": [\n    \"Synchronic (2020): Two paramedics begin to question their realities after coming across several bizarre deaths linked to a new narcotic with mind-bending effects.\",\n    \"ANIMA (2019): In a short musical film directed by Paul Thomas Anderson, Thom Yorke of Radiohead stars in a mind-bending visual piece. Best played loud.\",\n    \"Black Mirror: Bandersnatch (2018): In 1984, a young programmer begins to question reality as he adapts a dark fantasy novel into a video game. A mind-bending tale with multiple endings.\",\n    \"Maniac (2018): Two struggling strangers connect during a mind-bending pharmaceutical trial involving a doctor with mother issues and an emotionally complex computer.\",\n    \"Dark (2020): A missing child sets four families on a frantic hunt for answers as they unearth a mind-bending mystery that spans three generations.\"\n  ]\n}"
-```
-
-Alternatively, you could use the test script provided in `src/modules/workflow/test.py`.
-
-```zsh
-pipenv run python -m src.modules.workflow.test
-Loading .env environment variables...
-
-User Query: Feel good rom com movies recent
-Response: {
-  "catalog_recommendations": [
-    "Good on Paper (2021): After years of putting her career first, a stand-up comic meets a guy who seems perfect: smart, nice, successful... and possibly too good to be true.",
-    "Feel Good (2021): Stand-up comic Mae Martin navigates a passionate, messy new relationship with her girlfriend, George, while dealing with the challenges of sobriety.",
-    "Feel the Beat (2020): After blowing a Broadway audition, a self-centered dancer reluctantly returns home and agrees to coach a squad of young misfits for a big competition.",
-    "Tell Me When (2021): Workaholic Will puts his humdrum life in LA on hold to fulfill his grandpa's last wish: visiting Mexico City's most iconic sights and falling in love.",
-    "Good Luck Chuck (2007): Every time Chuck breaks up with a girlfriend, she ends up engaged to her next boyfriend. Soon, women are dating Chuck in hopes of meeting Mr. Right."
-  ]
-}
-```
 
 ## Monitoring
 
