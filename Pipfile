@@ -27,6 +27,7 @@ ipywidgets = "*"
 ipykernel = "*"
 python-dotenv = "*"
 gunicorn = "*"
+pgcli = "*"
 
 [requires]
 python_version = "3.11"

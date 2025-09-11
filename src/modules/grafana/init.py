@@ -23,37 +23,79 @@ PG_PORT = os.getenv("POSTGRES_PORT")
 def create_api_key():
     auth = (GRAFANA_USER, GRAFANA_PASSWORD)
     headers = {"Content-Type": "application/json"}
-    payload = {
+    
+    # Step 1: Create or get service account
+    sa_payload = {
         "name": "ProgrammaticKey",
         "role": "Admin",
     }
-    response = requests.post(
-        f"{GRAFANA_URL}/api/auth/keys", auth=auth, headers=headers, json=payload
+    
+    # Check if service account already exists
+    sa_list_response = requests.get(f"{GRAFANA_URL}/api/serviceaccounts/search", auth=auth)
+    service_account_id = None
+    
+    if sa_list_response.status_code == 200:
+        for sa in sa_list_response.json()["serviceAccounts"]:
+            if sa["name"] == "ProgrammaticKey":
+                service_account_id = sa["id"]
+                print("Service account already exists")
+                break
+    
+    # Create service account if it doesn't exist
+    if service_account_id is None:
+        sa_response = requests.post(
+            f"{GRAFANA_URL}/api/serviceaccounts", auth=auth, headers=headers, json=sa_payload
+        )
+        if sa_response.status_code == 201:
+            service_account_id = sa_response.json()["id"]
+            print("Service account created successfully")
+        elif sa_response.status_code == 400 and "already exists" in sa_response.text:
+            # Service account exists but wasn't found in the list, try to get it again
+            sa_list_response = requests.get(f"{GRAFANA_URL}/api/serviceaccounts/search", auth=auth)
+            if sa_list_response.status_code == 200:
+                for sa in sa_list_response.json()["serviceAccounts"]:
+                    if sa["name"] == "ProgrammaticKey":
+                        service_account_id = sa["id"]
+                        print("Found existing service account")
+                        break
+            if service_account_id is None:
+                print("Service account exists but could not be found")
+                return None
+        else:
+            print(f"Failed to create service account: {sa_response.text}")
+            return None
+    
+    # Step 2: Check if token already exists, if so delete and recreate
+    tokens_response = requests.get(f"{GRAFANA_URL}/api/serviceaccounts/{service_account_id}/tokens", auth=auth)
+    
+    if tokens_response.status_code == 200:
+        # Delete existing token if it exists
+        for token in tokens_response.json():
+            if token["name"] == "ProgrammaticToken":
+                print("Deleting existing token...")
+                delete_response = requests.delete(
+                    f"{GRAFANA_URL}/api/serviceaccounts/{service_account_id}/tokens/{token['id']}", 
+                    auth=auth
+                )
+                if delete_response.status_code == 200:
+                    print("Existing token deleted")
+                break
+    
+    # Create new token
+    token_payload = {
+        "name": "ProgrammaticToken"
+    }
+    
+    token_response = requests.post(
+        f"{GRAFANA_URL}/api/serviceaccounts/{service_account_id}/tokens",
+        auth=auth, headers=headers, json=token_payload
     )
-
-    if response.status_code == 200:
-        print("API key created successfully")
-        return response.json()["key"]
-
-    elif response.status_code == 409:  # Conflict, key already exists
-        print("API key already exists, updating...")
-        # Find the existing key
-        keys_response = requests.get(f"{GRAFANA_URL}/api/auth/keys", auth=auth)
-        if keys_response.status_code == 200:
-            for key in keys_response.json():
-                if key["name"] == "ProgrammaticKey":
-                    # Delete the existing key
-                    delete_response = requests.delete(
-                        f"{GRAFANA_URL}/api/auth/keys/{key['id']}", auth=auth
-                    )
-                    if delete_response.status_code == 200:
-                        print("Existing key deleted")
-                        # Create a new key
-                        return create_api_key()
-        print("Failed to update API key")
-        return None
+    
+    if token_response.status_code == 200:
+        print("Service account token created successfully")
+        return token_response.json()["key"]
     else:
-        print(f"Failed to create API key: {response.text}")
+        print(f"Failed to create service account token: {token_response.text}")
         return None
 
 
@@ -65,7 +107,7 @@ def create_or_update_datasource(api_key):
     datasource_payload = {
         "name": "PostgreSQL",
         "type": "postgres",
-        "url": f"{PG_HOST}:{PG_PORT}",
+        "url": f"postgres:{PG_PORT}",
         "access": "proxy",
         "user": PG_USER,
         "database": PG_DB,
@@ -121,7 +163,7 @@ def create_dashboard(api_key, datasource_uid):
         "Content-Type": "application/json",
     }
 
-    dashboard_file = "dashboard.json"
+    dashboard_file = "src/modules/grafana/dashboard.json"
 
     try:
         with open(dashboard_file, "r") as f:

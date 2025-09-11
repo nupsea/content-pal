@@ -57,10 +57,28 @@ docker run -it --rm \
 You can test the API using curl or any API client like Postman.
 ```zsh
 curl -X POST "http://localhost:5001/recommend" -H "Content-Type: application/json" -d '{"query": "Recommend me some sci-fi movies"}'
+
+"{\n  \"catalog_recommendations\": [\n    \"The Box (2009): A couple must decide whether to push a button that will net them a million dollars but that will also cause the death of a complete stranger.\",\n    \"Knowing (2009): An MIT astrophysics professor and his son unearth a string of numbers from a time capsule that seem to reveal a cataclysm that will wipe out humanity.\",\n    \"Level 16 (2018): In a bleak academy that teaches girls the virtues of passivity, two students uncover the ghastly purpose behind their training and resolve to escape.\",\n    \"3022 (2019): Stranded when the Earth is suddenly destroyed in a mysterious cataclysm, the astronauts aboard a marooned space station slowly lose their minds.\",\n    \"2012 (2009): When a flood of natural disasters begins to destroy the world, a divorced dad desperately tries to save his family by outrunning the cataclysmic chaos.\"\n  ]\n}"
 ```
 Or Alternatively, you can use the provided `test.py` script to test the API.
 ```zsh
 pipenv run python -m src.modules.workflow.test -p 5001
+User Query: Tom Cruise movies
+Making request to http://127.0.0.1:5001/recommend...
+
+Response status: 200
+Success! Response:
+"{\n  \"catalog_recommendations\": [\n    \"Rain Man (1988): Motivated by money, a selfish workaholic seeking a piece of his late father's inheritance takes a life-changing road trip with his estranged brother.\",\n    \"Magnolia (1999): Through chance, history and divine intervention, a cast of eclectic characters weaves and warps through each other's lives on a random day in California.\",\n    \"Tom Papa: You're Doing Great! (2020): Comedian Tom Papa takes on body image issues, social media, pets, Staten Island, the 'old days' and more in a special from his home state of New Jersey.\",\n    \"Tom and Jerry: The Magic Ring (2001): When a young wizard leaves Tom to guard his priceless magic ring, Jerry gets the ring stuck on his head, igniting a series of slapstick antics.\",\n    \"Hotel Transylvania 3: Summer Vacation (2018): It's love at first sight for Dracula when he meets Ericka, the charming but mysterious captain of the monster cruise that Mavis plans for the family.\"\n  ]\n}"
+```
+
+
+### Docker Compose
+
+This should bring up the entire application stack including Opensearch and the Flask app.
+
+```zsh
+docker-compose up -d
+
 ```
 
 
@@ -154,5 +172,12 @@ Refer `notebooks/rag_flow.ipynb` for details.
 
 
 ## Monitoring
+
+
+To check and debug the Postgres DB, you can use `pgcli` or any other Postgres client.
+
+```zsh
+pipenv run pgcli -h localhost -U postgres -d content_pal -W      
+```
 
 
