@@ -1,43 +1,82 @@
 # Content Pal
-A smart streaming content assistant to help users find what movies or tv-shows to watch and obtain adhoc recommendations from a search-chat interface.  
+A smart streaming content assistant to help users find what movies or tv-shows to watch and obtain adhoc recommendations from a search-chat interface using Retrieval-Augmented Generation (RAG) techniques. 
+
+### Data
+The content data is obtained from Kaggle Netflix Movies and TV shows. A user can search for movies or tv-shows available in the catalog based on various attributes like genre, director, cast, release year, etc.
+
+
+Data Source: [Kaggle Netflix Movies and TV Shows](https://www.kaggle.com/datasets/shivamb/netflix-shows)
+
+
+## High-Level Architecture
+
+
+
+
+### Workflow: 
+- Ingest the data and index it into a search engine (minsearch or opensearch)
+- Use a combination of keyword-based and semantic search to retrieve relevant documents based on user queries
+- Use a Large Language Model (LLM) to generate responses based on the retrieved documents and user query
+- Provide an API endpoint to interact with the system and get recommendations
+
 
 ## Setup
 
 ### Installation 
 
-Prerequisites: Python 3.11 or higher
-Package Mangaer: pipenv (in case of any others the instructions need to change accordingly)
+**Prerequisites**: Python 3.11 or higher
 
-Install the required libraries.
+**Package Manager**: pipenv (in case of any others the instructions need to change accordingly)
+
+> Install the required libraries.
 
 ```
 pipenv install openai scikit-learn pandas flask minsearch opensearch-py sentence-transformers lightgbm scikit-learn psycopg2-binary  sqlalchemy sqlalchemy-utils python-multipart flask-cors gunicorn
-```
-pipenv install --dev tqdm ipywidgets python-dotenv transformers[torch] datasets
 
-# TODO check streamlit
-
+pipenv install --dev tqdm ipywidgets python-dotenv pgcli ipykernel
 ```
 
 
-### Prep Internal Search Data
-
-Data obtained from Kaggle Netflix Movies and TV shows.
-
-### Search Engines
-Index Search data into Opensearch or minsearch a mini search engine implementation.
-
-#### Minsearch
-Minsearch is a lightweight, in-memory search engine designed for quick indexing and retrieval of documents. It is ideal for smaller datasets or when rapid prototyping is needed.
-Install Minsearch
-```sh
-pipenv install minsearch
-```
-
-## Running it with Docker
+## Running the Application
 
 The entire application can be run using Docker and Docker-Compose.
 Make sure you have Docker and Docker-Compose installed on your machine.
+
+### Environment Variables
+Create a `.env` file in the root directory and copy the structure of `.env_template`. Update the values accordingly.
+
+
+### DB Configuration
+Postgres is used to store the user feedback and usage data for monitoring purposes.
+
+```zsh
+docker-compose up postgres
+```
+Run the DB preparation script to create the necessary tables.
+```zsh
+pipenv run python -m src.modules.monitoring.db_prep
+```
+
+### Running with Docker Compose
+
+The easiest way to run the application is using Docker Compose.
+
+This should bring up the entire application stack including Opensearch and the Flask app.
+- Appliction (port 5001)
+- Opensearch (port 9200)
+- Opensearch Dashboards (port 5601)
+- Postgres (port 5432)
+- Grafana (port 3000)
+
+
+```zsh
+source .env && docker-compose up -d
+
+docker logs -f <container_id>  # To check the logs of the application
+
+```
+
+### #Optional - Running with Docker (without docker-compose)
 
 If you need to change some environment variables, you can do so in the `.env` file and
 correspondingly build DockerFile. 
@@ -53,13 +92,17 @@ docker run -it --rm \
   content-pal
 ```
 
-### Testing with app
+### Testing 
+
+#### API Endpoint
 You can test the API using curl or any API client like Postman.
 ```zsh
 curl -X POST "http://localhost:5001/recommend" -H "Content-Type: application/json" -d '{"query": "Recommend me some sci-fi movies"}'
 
 "{\n  \"catalog_recommendations\": [\n    \"The Box (2009): A couple must decide whether to push a button that will net them a million dollars but that will also cause the death of a complete stranger.\",\n    \"Knowing (2009): An MIT astrophysics professor and his son unearth a string of numbers from a time capsule that seem to reveal a cataclysm that will wipe out humanity.\",\n    \"Level 16 (2018): In a bleak academy that teaches girls the virtues of passivity, two students uncover the ghastly purpose behind their training and resolve to escape.\",\n    \"3022 (2019): Stranded when the Earth is suddenly destroyed in a mysterious cataclysm, the astronauts aboard a marooned space station slowly lose their minds.\",\n    \"2012 (2009): When a flood of natural disasters begins to destroy the world, a divorced dad desperately tries to save his family by outrunning the cataclysmic chaos.\"\n  ]\n}"
 ```
+
+#### Script to test the API
 Or Alternatively, you can use the provided `test.py` script to test the API.
 ```zsh
 pipenv run python -m src.modules.workflow.test -p 5001
@@ -72,46 +115,16 @@ Success! Response:
 ```
 
 
-### Docker Compose
-
-This should bring up the entire application stack including Opensearch and the Flask app.
-- Appliction (port 5001)
-- Opensearch (port 9200)
-- Opensearch Dashboards (port 5601)
-- Postgres (port 5432)
-- Grafana (port 3000)
-
-
-```zsh
-source .env && docker-compose up -d
-
-```
-
 #### CLI App to test
+![CLI App](image-1.png)
 ```zsh
 pipenv run python -m src.modules.workflow.cli
+
+# or to randomly get queries from a predefined list
+pipenv run python -m src.modules.workflow.cli --random
+
 ```
 
-
-
-#### Opensearch (Optional)
-
-Search Engine Start with Docker-Compose
-```sh
-source .envrc
-docker-compose up -d
-```
-
-You should see something like the below : 
-
-[+] Running 3/3
- ✔ Network content-pal_default  Created                                                                                                                                                                                                     0.0s 
- ✔ Container opensearch         Healthy                                                                                                                                                                                                    10.6s 
- ✔ Container os-dashboards      Started                                                                                                                                                                                                    10.7s 
-❯ 
-
-
-### Execution steps
 
 
 ## Ingestion and Indexing
@@ -185,6 +198,10 @@ Refer `notebooks/rag_flow.ipynb` for details.
 
 ## Monitoring
 
+You can monitor the usage and feedback of responses using Grafana dashboards.
+http://localhost:3000 (admin/admin) default creds or the ones set in the .env file.
+
+![Grafana Dashboard](image.png)
 
 To check and debug the Postgres DB, you can use `pgcli` or any other Postgres client.
 
@@ -192,4 +209,9 @@ To check and debug the Postgres DB, you can use `pgcli` or any other Postgres cl
 pipenv run pgcli -h localhost -U postgres -d content_pal -W      
 ```
 
+
+
+## References & Acknowledgements
+Thanks to the learnings from DataTalks.Club and the various open source libraries and tools that made this possible
+https://datatalks.club/courses/llm-zoomcamp/ 
 

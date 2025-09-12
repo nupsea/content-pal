@@ -255,10 +255,16 @@ class SchemaAwareSemanticSearch:
             r"movies? by ([^,\.]+)"
         ]
         
-        # Special patterns for "Name films/movies" - use original query for proper case detection
+        # Special patterns for "Name films/movies" - handle both proper case and lowercase
         name_patterns = [
             r"\b([A-Z][a-z]+ [A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+films?$",     # "Christopher Nolan films"
             r"\b([A-Z][a-z]+ [A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+movies?$"     # "Christopher Nolan movies" 
+        ]
+        
+        # Case-insensitive patterns for lowercase input
+        name_patterns_lower = [
+            r"\b([a-z]+ [a-z]+(?:\s+[a-z]+)*)\s+films?$",     # "christopher nolan films"
+            r"\b([a-z]+ [a-z]+(?:\s+[a-z]+)*)\s+movies?$"     # "christopher nolan movies" 
         ]
         
         for pattern in director_patterns:
@@ -270,6 +276,11 @@ class SchemaAwareSemanticSearch:
             matches = re.findall(pattern, q)
             entities['directors'].extend([m.strip() for m in matches if m.strip()])
         
+        # Check lowercase name patterns and title case the results
+        for pattern in name_patterns_lower:
+            matches = re.findall(pattern, q_lower)
+            entities['directors'].extend([m.strip().title() for m in matches if m.strip()])
+        
         # Actor patterns (only if not already detected as director)
         if not entities['directors']:  # Only check for actors if no directors found
             actor_patterns = [
@@ -278,10 +289,16 @@ class SchemaAwareSemanticSearch:
                 r"featuring ([^,\.]+)"
             ]
             
-            # Special patterns for "Name movies/films" - use original query for proper case detection
+            # Special patterns for "Name movies/films" - handle both proper case and lowercase
             actor_name_patterns = [
                 r"\b([A-Z][a-z]+ [A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+movies?$",  # "Leonardo DiCaprio movies"
                 r"\b([A-Z][a-z]+ [A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+films?$"    # "Tom Hanks films"
+            ]
+            
+            # Case-insensitive patterns for lowercase input
+            actor_name_patterns_lower = [
+                r"\b([a-z]+ [a-z]+(?:\s+[a-z]+)*)\s+movies?$",  # "leonardo dicaprio movies"
+                r"\b([a-z]+ [a-z]+(?:\s+[a-z]+)*)\s+films?$"    # "tom hanks films"
             ]
             
             for pattern in actor_patterns:
@@ -296,6 +313,11 @@ class SchemaAwareSemanticSearch:
             for pattern in actor_name_patterns:
                 matches = re.findall(pattern, q)
                 entities['actors'].extend([m.strip() for m in matches if m.strip()])
+            
+            # Check lowercase actor name patterns and title case the results
+            for pattern in actor_name_patterns_lower:
+                matches = re.findall(pattern, q_lower)
+                entities['actors'].extend([m.strip().title() for m in matches if m.strip()])
         
         # Genre detection (using existing vocab)
         for genre in self.vocab.get("genres", []):

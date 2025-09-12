@@ -27,7 +27,6 @@ tqdm = "*"
 ipywidgets = "*"
 ipykernel = "*"
 python-dotenv = "*"
-gunicorn = "*"
 pgcli = "*"
 
 [requires]
