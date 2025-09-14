@@ -66,7 +66,7 @@ You can run the Streamlit UI locally using the following command being in the ro
 ```
 and access ** Streamlit UI: http://localhost:8501
 
-![Content Pal Streamlit UI](streamlit.png)
+![Content Pal Streamlit Interface](streamlit.png)
 
 
 ### Running with Docker Compose (Optional)

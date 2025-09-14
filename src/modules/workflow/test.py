@@ -5,8 +5,8 @@ import argparse
 parser = argparse.ArgumentParser(description='Test Content-Pal API')
 parser.add_argument('--query', '-q', default="Tom Cruise movies", 
                    help='Search query (default: "Tom Cruise movies")')
-parser.add_argument('--port', '-p', default="5000", 
-                   help='Port number (default: 5000)')
+parser.add_argument('--port', '-p', default="5001", 
+                   help='Port number (default: 5001)')
 args = parser.parse_args()
 
 query = args.query

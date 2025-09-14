@@ -221,12 +221,22 @@ def display_movie_recommendations(results_data):
             with st.container():
                 # Parse the recommendation to make movie title bold
                 # Format is usually: "Title (Year): Description"
-                if ':' in recommendation:
+                # Simple pattern matching: look for "):" to find where title ends
+                if '):' in recommendation:
+                    # Split at "):" pattern to separate title from description
+                    title_part, description_part = recommendation.split('):', 1)
+                    title_part = title_part.strip() + ')'  # Add back the closing parenthesis
+                    
+                    st.markdown(f"#### {i}. {title_part}")
+                    st.markdown(f"{description_part.strip()}", unsafe_allow_html=True)
+                elif ':' in recommendation:
+                    # Fallback for other formats
                     title_part, description_part = recommendation.split(':', 1)
-                    st.markdown(f"**{i}. {title_part.strip()}:**{description_part}")
+                    st.markdown(f"#### {i}. {title_part.strip()}")
+                    st.markdown(f"{description_part.strip()}", unsafe_allow_html=True)
                 else:
-                    # Fallback if format is different
-                    st.markdown(f"**{i}.** {recommendation}")
+                    # No colon found
+                    st.markdown(f"#### {i}. {recommendation}")
                 st.markdown("---")
     
     return conversation_id
@@ -248,7 +258,7 @@ def main():
 
     # Sidebar for settings and info
     with st.sidebar:
-        st.header("⚙️ Settings")
+        st.header("⚙️ Service")
         
         # Connection status
         try:
@@ -260,19 +270,6 @@ def main():
         except Exception as e:
             st.error(f"❌ Could not connect to the search service at {BASE_URL}")
             st.caption("Start the service with: `docker-compose up`")
-        
-        st.markdown("---")
-        
-        # Random query option
-        random_queries = load_random_queries()
-        if random_queries:
-            st.subheader("🎲 Random Queries")
-            if st.button("Get Random Query"):
-                import random
-                random_query = random.choice(random_queries)
-                st.session_state.current_query = random_query
-                st.session_state.trigger_search = True
-                st.rerun()
         
         st.markdown("---")
         
@@ -429,15 +426,35 @@ def main():
             st.info("Make sure PostgreSQL is running and accessible")
     
     with tab1:
-        st.header("🔍 Search for Movies & TV Shows")
+        st.header("Search for Movies & TV Shows")
         
-        # Query input - using current_query from session state
-        query = st.text_input(
-            "What would you like to watch?",
-            placeholder="e.g., Christopher Nolan movies, romantic comedies...",
-            value=st.session_state.current_query,
-            key="query_text_input"
-        )
+        # Query input and random query button side by side
+        random_queries = load_random_queries()
+        if random_queries:
+            col1, col2 = st.columns([3.5, 1])
+            with col1:
+                query = st.text_input(
+                    "What would you like to watch?",
+                    placeholder="e.g., Christopher Nolan movies, romantic comedies...",
+                    value=st.session_state.current_query,
+                    key="query_text_input"
+                )
+            with col2:
+                # Add some vertical spacing to align button with input field
+                st.markdown("<br>", unsafe_allow_html=True)
+                if st.button("  🎲  Get Random Query ", key="random_query_btn", help="Get a random suggestion"):
+                    import random
+                    random_query = random.choice(random_queries)
+                    st.session_state.current_query = random_query
+                    st.session_state.trigger_search = True
+                    st.rerun()
+        else:
+            query = st.text_input(
+                "What would you like to watch?",
+                placeholder="e.g., Christopher Nolan movies, romantic comedies...",
+                value=st.session_state.current_query,
+                key="query_text_input"
+            )
         
         # Update session state when input changes
         if query != st.session_state.current_query:
@@ -464,6 +481,7 @@ def main():
                     st.session_state.current_query = example
                     st.session_state.trigger_search = True
                     st.rerun()
+        
         
         # Search button and results
         search_triggered = st.button("🔍 Search", type="primary") or st.session_state.trigger_search
