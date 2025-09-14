@@ -28,10 +28,16 @@ Data Source: [Kaggle Netflix Movies and TV Shows](https://www.kaggle.com/dataset
 
 **Package Manager**: pipenv (in case of any others the instructions need to change accordingly)
 
+Clone the repository
+```zsh
+git clone https://github.com/nupsea/content-pal.git
+```
+
 > Install the required libraries.
 
-```
-pipenv install openai scikit-learn pandas flask minsearch opensearch-py sentence-transformers lightgbm scikit-learn psycopg2-binary  sqlalchemy sqlalchemy-utils python-multipart flask-cors gunicorn
+```zsh
+cd content-pal  # Navigate to the project directory
+pipenv install openai scikit-learn pandas flask minsearch opensearch-py sentence-transformers psycopg2-binary sqlalchemy sqlalchemy-utils python-multipart flask-cors gunicorn
 
 pipenv install --dev tqdm ipywidgets python-dotenv pgcli ipykernel
 ```
@@ -41,20 +47,26 @@ pipenv install --dev tqdm ipywidgets python-dotenv pgcli ipykernel
 
 The entire application can be run using Docker and Docker-Compose.
 Make sure you have Docker and Docker-Compose installed on your machine.
+> Note: Replace the docker-compose.yml with docker-compose-with-os.yml if you want to use opensearch as the search engine option.
 
 ### Environment Variables
 Create a `.env` file in the root directory and copy the structure of `.env_template`. Update the values accordingly.
+```zsh
+cp .env_template .env
+# Update the values in .env file (mostly the OPENAI_API_KEY and OPENSEARCH_PASSWORD)
+```
 
 
 ### DB Configuration
-Postgres is used to store the user feedback and usage data for monitoring purposes.
+Postgres is used as a backend metadata store for user feedback and monitoring usage.
 
 ```zsh
 docker-compose up postgres
 ```
-Run the DB preparation script to create the necessary tables.
+Open a separate terminal, Run the DB preparation script to create the necessary tables.
 ```zsh
-pipenv run python -m src.modules.monitoring.db_prep
+cd content-pal  # Ensure you are in the project directory
+source .env && pipenv run python -m src.modules.workflow.db_prep
 ```
 
 ### Running with Streamlit UI
@@ -73,8 +85,8 @@ and access ** Streamlit UI: http://localhost:8501
 
 This should bring up the entire application stack including Opensearch and the Flask app.
 - Appliction (port 5001)
-- Opensearch (port 9200)
-- Opensearch Dashboards (port 5601)
+- Opensearch (port 9200) # optional
+- Opensearch Dashboards (port 5601) # optional
 - Postgres (port 5432)
 - Grafana (port 3000)
 
