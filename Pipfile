@@ -21,6 +21,7 @@ beautifulsoup4 = "*"
 psycopg2-binary = "*"
 gunicorn = "*"
 questionary = "*"
+streamlit = "*"
 
 [dev-packages]
 tqdm = "*"

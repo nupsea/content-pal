@@ -5,6 +5,10 @@ import uuid
 
 app = Flask(__name__)
 
+@app.route('/')
+def health():
+    return jsonify({"status": "healthy", "service": "content-pal-api"})
+
 @app.route('/recommend', methods=['POST'])
 def recommend():
     data = request.json

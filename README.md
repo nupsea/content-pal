@@ -57,9 +57,19 @@ Run the DB preparation script to create the necessary tables.
 pipenv run python -m src.modules.monitoring.db_prep
 ```
 
-### Running with Docker Compose
+### Running with Streamlit UI
 
-The easiest way to run the application is using Docker Compose.
+This is the easiest way to interact, experiment and test the application.
+You can run the Streamlit UI locally using the following command being in the root directory:
+```zsh
+./start_all.sh
+```
+and access ** Streamlit UI: http://localhost:8501
+
+![Content Pal Streamlit UI](streamlit.png)
+
+
+### Running with Docker Compose (Optional)
 
 This should bring up the entire application stack including Opensearch and the Flask app.
 - Appliction (port 5001)
@@ -76,7 +86,7 @@ docker logs -f <container_id>  # To check the logs of the application
 
 ```
 
-### #Optional - Running with Docker (without docker-compose)
+### Running with Docker without docker-compose (Optional)
 
 If you need to change some environment variables, you can do so in the `.env` file and
 correspondingly build DockerFile. 
@@ -92,7 +102,7 @@ docker run -it --rm \
   content-pal
 ```
 
-### Testing 
+### Testing (Optional)
 
 #### API Endpoint
 You can test the API using curl or any API client like Postman.
@@ -116,7 +126,7 @@ Success! Response:
 
 
 #### CLI App to test
-![CLI App](image-1.png)
+![CLI App](cli.png)
 ```zsh
 pipenv run python -m src.modules.workflow.cli
 
@@ -201,7 +211,7 @@ Refer `notebooks/rag_flow.ipynb` for details.
 You can monitor the usage and feedback of responses using Grafana dashboards.
 http://localhost:3000 (admin/admin) default creds or the ones set in the .env file.
 
-![Grafana Dashboard](image.png)
+![Grafana Dashboard](monitor.png)
 
 To check and debug the Postgres DB, you can use `pgcli` or any other Postgres client.
 
@@ -209,7 +219,7 @@ To check and debug the Postgres DB, you can use `pgcli` or any other Postgres cl
 pipenv run pgcli -h localhost -U postgres -d content_pal -W      
 ```
 
-
+Besides, you can also see few monitoring metrics in the Streamlit UI itself.
 
 ## References & Acknowledgements
 Thanks to the learnings from DataTalks.Club and the various open source libraries and tools that made this possible

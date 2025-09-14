@@ -12,7 +12,7 @@ RUN pipenv install --deploy --ignore-pipfile --system
 COPY src/modules/workflow/ ./src/modules/workflow/
 COPY src/modules/search/ ./src/modules/search/
 
-EXPOSE 5000
+EXPOSE 5001
 
-CMD gunicorn --bind 0.0.0.0:5000 src.modules.workflow.app:app
+CMD gunicorn --bind 0.0.0.0:5001 src.modules.workflow.app:app
 
