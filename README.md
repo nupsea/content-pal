@@ -37,7 +37,7 @@ git clone https://github.com/nupsea/content-pal.git
 
 ```zsh
 cd content-pal  # Navigate to the project directory
-pipenv install openai scikit-learn pandas flask minsearch opensearch-py sentence-transformers psycopg2-binary sqlalchemy sqlalchemy-utils python-multipart flask-cors gunicorn
+pipenv install openai scikit-learn pandas flask minsearch opensearch-py sentence-transformers psycopg2-binary sqlalchemy sqlalchemy-utils python-multipart flask-cors gunicorn streamlit
 
 pipenv install --dev tqdm ipywidgets python-dotenv pgcli ipykernel
 ```
