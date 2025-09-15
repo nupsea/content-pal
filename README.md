@@ -40,6 +40,8 @@ cd content-pal  # Navigate to the project directory
 pipenv install openai scikit-learn pandas flask minsearch opensearch-py sentence-transformers psycopg2-binary sqlalchemy sqlalchemy-utils python-multipart flask-cors gunicorn
 
 pipenv install --dev tqdm ipywidgets python-dotenv pgcli ipykernel
+pipenv lock
+
 ```
 
 
@@ -58,15 +60,17 @@ cp .env_template .env
 
 
 ### DB Configuration
-Postgres is used as a backend metadata store for user feedback and monitoring usage.
-
+Initial setup 
 ```zsh
-docker-compose up postgres
+docker-compose up -d
 ```
-Open a separate terminal, Run the DB preparation script to create the necessary tables.
+Open a separate terminal, Run the DB preparation script to create the necessary tables and run the Flask app for the first time to initialize the ingestion and indexing.
 ```zsh
 cd content-pal  # Ensure you are in the project directory
-source .env && pipenv run python -m src.modules.workflow.db_prep
+source .env 
+pipenv run python -m src.modules.workflow.db_prep
+pipenv run python -m src.modules.workflow.app 
+
 ```
 
 ### Running with Streamlit UI
@@ -74,9 +78,10 @@ source .env && pipenv run python -m src.modules.workflow.db_prep
 This is the easiest way to interact, experiment and test the application.
 You can run the Streamlit UI locally using the following command being in the root directory:
 ```zsh
-./start_all.sh
+./stop_all.sh  # To stop any existing instances
+./start_all.sh # To start the application stack
 ```
-and access ** Streamlit UI: http://localhost:8501
+and access **Streamlit UI**: http://localhost:8501
 
 ![Content Pal Streamlit Interface](streamlit.png)
 
