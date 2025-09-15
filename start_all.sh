@@ -27,7 +27,7 @@ sleep 10
 echo "Service Status:"
 echo "=================="
 
-services=("opensearch" "postgres" "grafana" "app")
+services=("postgres" "grafana" "app")
 for service in "${services[@]}"; do
     if docker-compose ps $service | grep -q "Up"; then
         echo "$service: Running"
