@@ -9,10 +9,43 @@ Data Source: [Kaggle Netflix Movies and TV Shows](https://www.kaggle.com/dataset
 
 
 ## High-Level Architecture
-
-
-
-
+```
+  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+  │  Streamlit UI   │    │    Flask API    │    │   PostgreSQL    │
+  │   (Frontend)    │───▶│   (Backend)     │───▶│   (Logging)     │
+  └─────────────────┘    └─────────────────┘    └─────────────────┘
+                                 │
+                                 ▼
+  ┌────────────────────────────────────────────────────────────────┐
+  │                        RAG Pipeline                            │
+  │                                                                │
+  │  User Query                                                    │
+  │       │                                                        │
+  │       ▼                                                        │
+  │  ┌─────────────────┐              ┌─────────────────┐          │
+  │  │    Retrieval    │              │   Generation    │          │
+  │  │                 │─────────────▶│                 │          │
+  │  │  Search Engine  │   Context    │   OpenAI LLM    │          │
+  │  │  (MinSearch/    │   Documents  │     (GPT)       │          │
+  │  │   OpenSearch)   │              │                 │          │
+  │  └─────────────────┘              └─────────────────┘          │
+  │       │                                    │                   │
+  │       ▼                                    ▼                   │
+  │  ┌─────────────────┐              Final Response               │
+  │  │   Netflix CSV   │              (Recommendations)            │
+  │  │    Dataset      │                                           │
+  │  └─────────────────┘                                           │
+  └────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
+  ┌────────────────────────────────────────────────────────────────┐
+  │                        Monitoring                              │
+  │  ┌─────────────────┐                                           │
+  │  │     Grafana     │                                           │
+  │  │   (Dashboard)   │                                           │
+  │  └─────────────────┘                                           │
+  └────────────────────────────────────────────────────────────────┘
+```
 ### Workflow: 
 - Ingest the data and index it into a search engine (minsearch or opensearch)
 - Use a combination of keyword-based and semantic search to retrieve relevant documents based on user queries
@@ -22,48 +55,78 @@ Data Source: [Kaggle Netflix Movies and TV Shows](https://www.kaggle.com/dataset
 
 ## Setup
 
-### Installation 
 
-**Prerequisites**: Python 3.11 or higher
+###  Prerequisites: 
+- **Python 3.11** or higher
+- **Docker and Docker-Compose** (for running the application stack)
+- **Package Manager**: pipenv (in case of any others the instructions need to change accordingly)
+- **OpenAI API Key**: You need to have an OpenAI API key to use the LLM capabilities. You can get it from [OpenAI](https://platform.openai.com/account/api-keys).
 
-**Package Manager**: pipenv (in case of any others the instructions need to change accordingly)
+### Setup & Installation 
 
 Clone the repository
 ```zsh
 git clone https://github.com/nupsea/content-pal.git
 ```
 
-> Install the required libraries.
-
+####  Environment Variables
+Navigate to the project directory and Create a `.env` file in the root directory and copy the structure of `.env_template`. Update the values accordingly.
 ```zsh
-cd content-pal  # Navigate to the project directory
-pipenv install openai scikit-learn pandas flask minsearch opensearch-py sentence-transformers psycopg2-binary sqlalchemy sqlalchemy-utils python-multipart flask-cors gunicorn streamlit
-
-pipenv install --dev tqdm ipywidgets python-dotenv pgcli ipykernel
-pipenv lock
-
-```
-
-
-## Running the Application
-
-The entire application can be run using Docker and Docker-Compose.
-Make sure you have Docker and Docker-Compose installed on your machine.
-> Note: Replace the docker-compose.yml with docker-compose-with-os.yml if you want to use opensearch as the search engine option.
-
-### Environment Variables
-Create a `.env` file in the root directory and copy the structure of `.env_template`. Update the values accordingly.
-```zsh
+cd content-pal
 cp .env_template .env
 # Update the values in .env file (mostly the OPENAI_API_KEY and OPENSEARCH_PASSWORD)
 ```
 
+#### Quick Setup & Start
+Ensure you are in the root directory. Run the setup script to install dependencies and set up the environment. This also starts the application.
+```zsh
+./setup_and_start.sh
+```
 
+> Note: This provides the status of the application startup and points you to the Streamlit UI [http://localhost:8501](http://localhost:8501) and other interfaces. It may take a few minutes for the application to be fully up and running.
+
+![Content Pal Streamlit Interface](streamlit.png)
+
+
+
+
+
+## Manual Optional Setup (needed when you change code or configuration)
+
+### Running the Application with Modifications
+
+The entire application can be run using Docker and Docker-Compose.
+> Note: Replace the docker-compose.yml with docker-compose-with-os.yml if you want to use opensearch as the search engine option.
+
+Any changes to the code, configuration, environment variables, or data will require you to rebuild the Docker image and restart the application stack.
+
+```zsh
+./stop_all.sh  # To stop any existing instances
+docker-compose down --volumes  # To remove existing containers and volumes
+docker-compose build --no-cache  # To rebuild the Docker image
+docker-compose up --force-recreate -d  # To start the application stack
+
+docker logs -f <container_id>  # To check the logs of the application
+```
 ### DB Configuration
-Initial setup 
+Initial setup if the database and tables are not created.
+Make sure you have Postgres running. If you are using Docker, you can use the provided  docker-compose.yml file to start a Postgres container.
 ```zsh
 docker-compose up -d
 ```
+
+This should bring up the entire application stack including the Flask app and Optional Opensearch.
+- Appliction (port 5001)
+- Opensearch (port 9200) # optional
+- Opensearch Dashboards (port 5601) # optional
+- Postgres (port 5432)
+- Grafana (port 3000)
+
+
+```zsh
+docker logs -f <container_id>  # To check the logs of the application
+```
+
 Open a separate terminal, Run the DB preparation script to create the necessary tables and run the Flask app for the first time to initialize the ingestion and indexing.
 ```zsh
 cd content-pal  # Ensure you are in the project directory
@@ -73,35 +136,17 @@ pipenv run python -m src.modules.workflow.app
 
 ```
 
-### Running with Streamlit UI
+### Launching Streamlit UI
 
 This is the easiest way to interact, experiment and test the application.
 You can run the Streamlit UI locally using the following command being in the root directory:
 ```zsh
-./stop_all.sh  # To stop any existing instances
-./start_all.sh # To start the application stack
+source .env 
+pipenv run streamlit run src/modules/workflow/streamlit_app.py
 ```
 and access **Streamlit UI**: http://localhost:8501
 
-![Content Pal Streamlit Interface](streamlit.png)
 
-
-### Running with Docker Compose (Optional)
-
-This should bring up the entire application stack including Opensearch and the Flask app.
-- Appliction (port 5001)
-- Opensearch (port 9200) # optional
-- Opensearch Dashboards (port 5601) # optional
-- Postgres (port 5432)
-- Grafana (port 3000)
-
-
-```zsh
-source .env && docker-compose up -d
-
-docker logs -f <container_id>  # To check the logs of the application
-
-```
 
 ### Running with Docker without docker-compose (Optional)
 
@@ -119,7 +164,7 @@ docker run -it --rm \
   content-pal
 ```
 
-### Testing (Optional)
+### Testing 
 
 #### API Endpoint
 You can test the API using curl or any API client like Postman.

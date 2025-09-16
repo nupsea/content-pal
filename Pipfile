@@ -5,20 +5,18 @@ name = "pypi"
 
 [packages]
 openai = "*"
+scikit-learn = "*"
 pandas = "*"
 flask = "*"
 minsearch = "*"
 opensearch-py = "*"
 sentence-transformers = "*"
-lightgbm = "*"
-scikit-learn = "*"
 psycopg2-binary = "*"
 sqlalchemy = "*"
 sqlalchemy-utils = "*"
 python-multipart = "*"
 flask-cors = "*"
 gunicorn = "*"
-transformers = {extras = ["torch"], version = "*"}
 streamlit = "*"
 
 [dev-packages]
@@ -30,4 +28,3 @@ ipykernel = "*"
 
 [requires]
 python_version = "3.11"
-python_full_version = "3.11.9"
