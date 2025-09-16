@@ -112,8 +112,41 @@ echo "Waiting for services to initialize..."
 sleep 15
 
 # Database initialization
-echo "Initializing database..."
-pipenv run python -m src.modules.workflow.db_prep
+echo "Checking database initialization..."
+
+# Check if database tables already exist using Python
+DB_CHECK_RESULT=$(pipenv run python -c "
+import os
+import psycopg2
+from dotenv import load_dotenv
+
+load_dotenv()
+
+try:
+    conn = psycopg2.connect(
+        host=os.getenv('POSTGRES_HOST', 'localhost'),
+        database=os.getenv('POSTGRES_DB', 'content_pal'),
+        user=os.getenv('POSTGRES_USER', 'postgres'),
+        password=os.getenv('POSTGRES_PASSWORD', 'postgres'),
+        port=os.getenv('POSTGRES_PORT', '5432'),
+        sslmode='prefer',
+        gssencmode='disable'
+    )
+    with conn.cursor() as cur:
+        cur.execute(\"SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'conversations')\")
+        exists = cur.fetchone()[0]
+        print('exists' if exists else 'not_exists')
+    conn.close()
+except Exception:
+    print('not_exists')
+" 2>/dev/null)
+
+if [ "$DB_CHECK_RESULT" = "exists" ]; then
+    echo "Database tables already exist, skipping initialization"
+else
+    echo "Initializing database tables..."
+    pipenv run python -m src.modules.workflow.db_prep
+fi
 
 # Wait for API to be ready
 echo "Waiting for API to be ready..."
