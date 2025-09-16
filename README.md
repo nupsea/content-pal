@@ -46,11 +46,13 @@ Data Source: [Kaggle Netflix Movies and TV Shows](https://www.kaggle.com/dataset
   │  └─────────────────┘                                           │
   └────────────────────────────────────────────────────────────────┘
 ```
-### Workflow: 
-- Ingest the data and index it into a search engine (minsearch or opensearch)
-- Use a combination of keyword-based and semantic search to retrieve relevant documents based on user queries
-- Use a Large Language Model (LLM) to generate responses based on the retrieved documents and user query
-- Provide an API endpoint to interact with the system and get recommendations
+### RAG Workflow:
+1. **User Query** → "Show me sci-fi movies with Tom Cruise"
+2. **Retrieval** → Search engine finds relevant movies from Netflix dataset
+3. **Context** → Retrieved movie data passed to LLM as context
+4. **Generation** → OpenAI LLM generates personalized recommendations
+5. **Response** → Formatted recommendations returned to user
+6. **Logging** → All interactions stored in PostgreSQL for monitoring
 
 
 ## Setup
@@ -78,12 +80,17 @@ cp .env_template .env
 ```
 
 #### Quick Setup & Start
-Ensure you are in the root directory. Run the setup script to install dependencies and set up the environment. This also starts the application.
+Ensure you are in the root directory. Run the setup script to install dependencies and start the application:
 ```zsh
 ./setup_and_start.sh
 ```
 
-> Note: This provides the status of the application startup and points you to the Streamlit UI [http://localhost:8501](http://localhost:8501) and other interfaces. It may take a few minutes for the application to be fully up and running.
+**Access URLs after startup:**
+- **Streamlit UI**: [http://localhost:8501](http://localhost:8501) - Main interface
+- **API Backend**: http://localhost:5001 - REST API
+- **Grafana**: http://localhost:3000 - Monitoring dashboard
+
+> **Note**: Initial startup may take a few minutes to download dependencies and initialize services.
 
 ![Content Pal Streamlit Interface](streamlit.png)
 
@@ -91,7 +98,7 @@ Ensure you are in the root directory. Run the setup script to install dependenci
 
 
 
-## Manual Optional Setup (needed when you change code or configuration)
+## Advanced Setup (for development and customization)
 
 ### Running the Application with Modifications
 
